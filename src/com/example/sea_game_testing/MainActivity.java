@@ -1,8 +1,8 @@
 package com.example.sea_game_testing;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends Activity {
 
@@ -13,4 +13,11 @@ public class MainActivity extends Activity {
 
     }
 
+    public void login(View v) {
+    	
+    }
+    
+    public void finish(View v) {
+    	
+    }
 }

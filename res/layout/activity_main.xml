@@ -4,47 +4,74 @@
     android:layout_height="match_parent"
     android:background="@drawable/background" >
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/login" >
+        android:background="@drawable/login"
+        android:orientation="vertical" >
 
-        <TableRow
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
-            <TextView
-                style="@style/home_text"
+            <TableRow
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user"
-                 />
+                android:layout_height="wrap_content" >
 
-            <EditText
-                android:id="@+id/user"
+                <TextView
+                    style="@style/home_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user" />
+
+                <EditText
+                    android:id="@+id/user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_intput" />
+            </TableRow>
+
+            <TableRow
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/user_intput" />
-        </TableRow>
+                android:layout_height="wrap_content" >
 
-        <TableRow
+                <TextView
+                    style="@style/home_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password_intput" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
 
-             <TextView
-                style="@style/home_text"
+            
+
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/password"
-                 />
+                android:layout_weight="1"
+                android:onClick="login"
+                android:text="@string/login" />
 
-            <EditText
-                android:id="@+id/password"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/password_intput" />
-        </TableRow>
-    </TableLayout>
+                android:layout_weight="1"
+                android:onClick="finish"
+                android:text="@string/cancel" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
