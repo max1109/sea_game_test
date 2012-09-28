@@ -1,6 +1,5 @@
 package com.example.gameData;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -21,7 +20,7 @@ public class Background {
 
 	public void drawBackground( Canvas canvas ) {
 		location += moveSize;
-		
+
 		if ( location >  ( background.getWidth() - Game.DEVICE_WIDTH )  ) {
 			
 			Bitmap bmp1 = Bitmap.createBitmap(

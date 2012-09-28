@@ -17,19 +17,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 	public GameSurfaceView(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 		init(context);
 	}
 
 	public GameSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		init(context);
 	}
 
 	public GameSurfaceView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 		init(context);
 	}
 
@@ -50,33 +47,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		
 	}
 	
-	int background_x;
-	public int getBackgroundX() {
-		return background_x;
-	}
-
-	public void setBackgroundX( int x) {
-
-		background_x = x;
-	}
-
-//	@Override
-//	protected void onDraw(Canvas canvas) {
-//		if ( background != null ) {
-//			drawBackground(canvas);
-////			Bitmap bmp = Bitmap.createBitmap(background, background_x, 0, Game.DEVICE_WIDTH, background.getHeight());
-////			Log.w("onDraw" , "background_x = " + background_x);
-////			canvas.drawBitmap(bmp, 0 , 0, null);
-////			bmp.recycle();
-////			bmp = null;
-//			
-//		}else {
-//			canvas.drawColor(Color.RED);
-//		}
-//	}
-
 	public void Draw() {
 		Canvas canvas = holder.lockCanvas();
+		if ( canvas != null ) {
+			if ( background != null ) {
+				
+			} else {
+				
+			}
+		}
 		if ( background != null && canvas != null) {
 			background.drawBackground(canvas);
 			holder.unlockCanvasAndPost(canvas);

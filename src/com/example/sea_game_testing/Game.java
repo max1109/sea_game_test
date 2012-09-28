@@ -11,30 +11,39 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.gameData.Background;
+import com.example.gameData.Protagonist;
 import com.game.view.GameSurfaceView;
 
 public class Game extends Activity {
 
 	private GameSurfaceView gv = null;
-	private final static int GAME_START = 1;
 	public static int DEVICE_WIDTH = 0;
 	public static int DEVICE_HEIGHT = 0;
-	private static int PUSH_ID = 0;
+	
+	private final static int GAME_START = 1;
+	private final static int GAME_STOP = 2;
+	private static int PUSH_ID = GAME_START;
 	TestThread t = null;
+	Protagonist p = null;
+	Background b = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
 		getWindowSize();
+		Log.e("tag" , "aaa \n bb");
 		gv = (GameSurfaceView) findViewById(R.id.game);
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
-		gv.init(null, new Background(bmp));
+		b = new Background(bmp);
+		p = new Protagonist("章魚" , this);
+		gv.init( p , b );
+		t = new TestThread( gv);
+		t.start();
 	}
 	
 	public void start(View v) {
-		t = new TestThread( gv);
-		t.start();
+		PUSH_ID = GAME_START;
 	}
 
 	public void stop(View v) {
@@ -87,10 +96,14 @@ public class Game extends Activity {
 					this.sleep(20);
 				} catch (InterruptedException e) {
 				}
-
-				synchronized (view.getHolder()) {
-					view.Draw();
+				if (PUSH_ID == GAME_START) {
+					synchronized (view.getHolder()) {
+						view.Draw();
+					}
+				} else if (PUSH_ID == GAME_STOP) {
+					
 				}
+				
 			}
 		}
 	}
