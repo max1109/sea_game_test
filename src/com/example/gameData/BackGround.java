@@ -13,6 +13,7 @@ public class Background {
 	private Bitmap background = null;
 	int location = 0;
 	int moveSize = 40;
+	
 	public Background(  Bitmap background ) {
 //		this.c = c;
 		this.background = background;

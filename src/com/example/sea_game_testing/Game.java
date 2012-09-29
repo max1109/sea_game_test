@@ -31,7 +31,7 @@ public class Game extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
 		getWindowSize();
-		Log.e("tag" , "aaa \n bb");
+		
 		gv = (GameSurfaceView) findViewById(R.id.game);
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
@@ -43,7 +43,8 @@ public class Game extends Activity {
 	}
 	
 	public void start(View v) {
-		PUSH_ID = GAME_START;
+//		PUSH_ID = GAME_START;
+		p.setHeight( ( p.getHeight() + 5 ) % DEVICE_HEIGHT );
 	}
 
 	public void stop(View v) {
@@ -93,7 +94,7 @@ public class Game extends Activity {
 		public void run() {
 			while (loop) {
 				try {
-					this.sleep(20);
+					this.sleep(30);
 				} catch (InterruptedException e) {
 				}
 				if (PUSH_ID == GAME_START) {

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -32,7 +33,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 	private Protagonist p = null;
 	private Context context = null;
-//	private Bitmap background = null;
 	private Background background = null;
 	private void init(Context context) {
 		this.context = context;
@@ -43,24 +43,22 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	public void init(Protagonist p, Background background) {
 		this.p = p;
 		this.background = background;
-//		Log.w("init" , background.getWidth() + " " + background.getHeight());
 		
 	}
 	
 	public void Draw() {
 		Canvas canvas = holder.lockCanvas();
-		if ( canvas != null ) {
-			if ( background != null ) {
-				
-			} else {
-				
-			}
-		}
-		if ( background != null && canvas != null) {
+		
+		if ( canvas != null && background != null ) {
 			background.drawBackground(canvas);
+			
+		}
+		if ( canvas != null && p != null ) {
+			p.drawProtagonist(canvas);
+		}
+		
+		if (canvas != null) {
 			holder.unlockCanvasAndPost(canvas);
-		}else {
-//			canvas.drawColor(Color.RED);
 		}
 	}
 
@@ -72,6 +70,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		
 	}
 
+	@Override 
+	public boolean onTouchEvent( MotionEvent event ) {
+		super.onTouchEvent(event);
+		Log.e("touch" , "" +event.getAction());
+		if ( p != null ) {
+			p.setX( (int)event.getX());
+			p.setY( (int)event.getY());
+		}
+		
+		return true;
+	}
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 //		 TODO Auto-generated method stub
