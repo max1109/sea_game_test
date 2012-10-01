@@ -14,6 +14,8 @@ public class Protagonist {
 	String name="";
 	int power = 0;
 	int height = 0;
+	int width = 0;
+	Bitmap  move_animation_bitmap[];
 	int move_animation[] = {
 			R.drawable.octopus_1,
 			R.drawable.octopus_2,
@@ -29,11 +31,19 @@ public class Protagonist {
 	Context c  = null;
 	public Protagonist(String name , Context c ) {
 		this.name = name;
-		this.c = c; 
+		this.c = c;
+		init(c);
 	}
 
 	public int getHeight() {
 		return height;
+	}
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getX() {
+		return x;
 	}
 	public void setX( int x) {
 		this.x= x;
@@ -41,16 +51,30 @@ public class Protagonist {
 	public void setY( int y) {
 		this.y= y;
 	}
-	public void setHeight( int h) {
-		height = h;
+	public int getY() {
+		return y;
 	}
+	
+	private void init( Context c ) {
+		Bitmap tmp[] = new Bitmap[move_animation.length];
+		for (int x = 0; x > tmp.length; x++ ) {
+			tmp[x] = BitmapFactory.decodeResource(
+					c.getResources(), 
+					move_animation[x]
+					);
+		}
+		width = tmp[0].getWidth();
+		height = tmp[0].getHeight();
+		move_animation_bitmap = tmp;
+	}
+	
 	public void drawProtagonist( Canvas canvas ) {
-		Bitmap bmp = BitmapFactory.decodeResource(c.getResources(), getMoveAnimation() );
+		Bitmap bmp = move_animation_bitmap[ getMoveAnimation() ];
 //		canvas.drawBitmap(bmp, x , y , null);
 		canvas.drawBitmap(bmp, x - bmp.getWidth() / 2, y - bmp.getHeight() / 2 , null); //test use
 	}
 	public int getMoveAnimation() {
 		_move_animation  = ( _move_animation + 1 ) % (move_animation.length - 1 );   
-		return move_animation[ _move_animation ];
+		return _move_animation;
 	}
 }

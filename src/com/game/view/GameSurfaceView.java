@@ -1,9 +1,7 @@
 package com.game.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,8 +9,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.gameData.Background;
+import com.example.gameData.Checkpoints;
 import com.example.gameData.Protagonist;
-import com.example.sea_game_testing.Game;
+import com.example.gameData.Role;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -33,6 +32,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 	private Protagonist p = null;
 	private Context context = null;
+	private Checkpoints checkpoints = null; 
 	private Background background = null;
 	private void init(Context context) {
 		this.context = context;
@@ -40,10 +40,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		holder.addCallback(this);
 		
 	}
-	public void init(Protagonist p, Background background) {
+	public void init(Protagonist p, Background background, Checkpoints checkpoints) {
 		this.p = p;
 		this.background = background;
-		
+		this.checkpoints = checkpoints; 
+		h = p.getHeight();
+		w = p.getWidth();
 	}
 	
 	public void Draw() {
@@ -55,13 +57,54 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		}
 		if ( canvas != null && p != null ) {
 			p.drawProtagonist(canvas);
+			CollideListener();
+		}
+		if ( canvas != null && checkpoints != null ) {
+			checkpoints.draw(canvas);
 		}
 		
 		if (canvas != null) {
 			holder.unlockCanvasAndPost(canvas);
 		}
 	}
-
+	int h = 0;
+	int w = 0;
+	int pX = p.getX() + w; 
+	int pY = p.getY() + h;
+	private void CollideListener() {
+		
+		for (int x = 0; x < checkpoints.getRoleListSize(); x++ ) {
+			Role r = checkpoints.getRole( x );
+			if (r != null ) {
+				if ( CollideWidth(r) && CollideHeight(r) ) { //碰撞 
+					r.setDead( true);
+//					add 分數
+				}
+			}
+		}
+		
+	}
+	
+	private boolean CollideWidth( Role r ) {
+		if ( 
+				( w <= r.getX() && r.getX() <= pX ) && 
+				( w <= ( r.getX() + r.getWidth() ) && ( r.getX() + r.getWidth() ) <= pX ) ) 
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean CollideHeight( Role r ) {
+		if ( 
+				( h <= r.getY() && r.getY() <= pY ) && 
+				( h <= (r.getY() + r.getHeight() ) && (r.getY() + r.getHeight() ) <= pY ) ) 
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	private SurfaceHolder holder = null;
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,

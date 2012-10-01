@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 
 import com.example.sea_game_testing.R;
 
-public class Fish1 extends Role{
+public class Fish1 extends Role {
 
 	public Fish1() {
 		
@@ -27,6 +27,8 @@ public class Fish1 extends Role{
 					move_animation[x]
 					);
 		}
+		super.setWidth( tmp[0].getWidth());
+		super.setHeight( tmp[0].getHeight());
 		move_animation_bitmap = tmp;
 	}
 	
@@ -40,9 +42,10 @@ public class Fish1 extends Role{
 	
 	int _move_animation = 0;
 	int _move = 8;
-	
-	 
-	
+
+	public void setMove( int m) {
+		_move = m;
+	}
 	public void draw( Canvas canvas) {
 		Bitmap tmp = move_animation_bitmap[ getMoveAnimation() ];
 		canvas.drawBitmap(
@@ -50,8 +53,9 @@ public class Fish1 extends Role{
 				x - tmp.getWidth() / 2 - _move, 
 				y - tmp.getHeight() / 2 , 
 				null
-			); //test use	
+			); 	
 	}
+	
 	
 	public int getMoveAnimation() {
 		_move_animation  = ( _move_animation + 1 ) % (move_animation.length - 1 );   

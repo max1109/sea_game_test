@@ -43,8 +43,8 @@ public class Game extends Activity {
 		
 		b = new Background(bmp);
 		p = new Protagonist("章魚" , this);
-		gv.init( p , b );
-		t = new TestThread( gv);
+		gv.init( p , b , c );
+		t = new TestThread( gv );
 		t.start();
 	}
 	private void init() {
@@ -53,7 +53,7 @@ public class Game extends Activity {
 		gv = (GameSurfaceView) findViewById(R.id.game);
 	}
 	public void start(View v) {
-		p.setHeight( ( p.getHeight() + 5 ) % DEVICE_HEIGHT );
+		p.setY( ( p.getY() + 5 ) % DEVICE_HEIGHT );
 	}
 
 	public void stop(View v) {
