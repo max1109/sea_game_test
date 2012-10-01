@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 
 import com.example.gameData.Background;
+import com.example.gameData.Checkpoints;
+import com.example.gameData.Fish1;
 import com.example.gameData.Protagonist;
 import com.game.view.GameSurfaceView;
 
@@ -23,27 +22,37 @@ public class Game extends Activity {
 	private final static int GAME_START = 1;
 	private final static int GAME_STOP = 2;
 	private static int PUSH_ID = GAME_START;
-	TestThread t = null;
-	Protagonist p = null;
-	Background b = null;
+	public static long GAME_START_TIME = 0;
+	private TestThread t = null; // 畫面 Thread
+	private Protagonist p = null; // 主角
+	private Background b = null; // 背景
+	private Checkpoints c = null; // 怪物
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
-		getWindowSize();
-		
-		gv = (GameSurfaceView) findViewById(R.id.game);
+		init();
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
+		c = new Checkpoints();
+		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 8));
+		c.addRole(new Fish1( DEVICE_WIDTH, 50, "a_fish", this, 4));
+		c.addRole(new Fish1( DEVICE_WIDTH, 70, "b_fish", this, 3));
+		c.addRole(new Fish1( DEVICE_WIDTH, 90, "c_fish", this, 2));
+		
 		b = new Background(bmp);
 		p = new Protagonist("章魚" , this);
 		gv.init( p , b );
 		t = new TestThread( gv);
 		t.start();
 	}
-	
+	private void init() {
+		getWindowSize();
+		GAME_START_TIME = System.currentTimeMillis();
+		gv = (GameSurfaceView) findViewById(R.id.game);
+	}
 	public void start(View v) {
-//		PUSH_ID = GAME_START;
 		p.setHeight( ( p.getHeight() + 5 ) % DEVICE_HEIGHT );
 	}
 

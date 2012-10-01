@@ -9,11 +9,16 @@ import com.example.sea_game_testing.R;
 
 public class Fish1 extends Role{
 
-	public Fish1(int x, int y, String name , Context c ) {
+	public Fish1() {
+		
+	}
+			
+	public Fish1(int x, int y, String name , Context c  , int time) {
 
-		super(x, y, name);
+		super(x, y, name, time);
 		init( c );
 	}
+	
 	private void init( Context c ) {
 		Bitmap tmp[] = new Bitmap[move_animation.length];
 		for (int x = 0; x > tmp.length; x++ ) {
@@ -24,6 +29,7 @@ public class Fish1 extends Role{
 		}
 		move_animation_bitmap = tmp;
 	}
+	
 	private Context c = null; 
 	Bitmap  move_animation_bitmap[];
 	int move_animation[] = {
@@ -35,9 +41,9 @@ public class Fish1 extends Role{
 	int _move_animation = 0;
 	int _move = 8;
 	
-	private static int START_TIME = 4; // game start time is 4 
+	 
 	
-	public void drawFish( Canvas canvas) {
+	public void draw( Canvas canvas) {
 		Bitmap tmp = move_animation_bitmap[ getMoveAnimation() ];
 		canvas.drawBitmap(
 				tmp, 
