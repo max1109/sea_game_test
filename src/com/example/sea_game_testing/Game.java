@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import com.example.gameData.Background;
@@ -23,6 +24,7 @@ public class Game extends Activity {
 	private final static int GAME_STOP = 2;
 	private static int PUSH_ID = GAME_START;
 	public static long GAME_START_TIME = 0;
+	public static int score = 100;
 	private TestThread t = null; // 畫面 Thread
 	private Protagonist p = null; // 主角
 	private Background b = null; // 背景
@@ -37,9 +39,9 @@ public class Game extends Activity {
 				R.drawable.background_3200_752);
 		c = new Checkpoints();
 		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 8));
-		c.addRole(new Fish1( DEVICE_WIDTH, 50, "a_fish", this, 4));
-		c.addRole(new Fish1( DEVICE_WIDTH, 70, "b_fish", this, 3));
-		c.addRole(new Fish1( DEVICE_WIDTH, 90, "c_fish", this, 2));
+//		c.addRole(new Fish1( DEVICE_WIDTH, 60, "a_fish", this, 4));
+//		c.addRole(new Fish1( DEVICE_WIDTH, 70, "b_fish", this, 3));
+//		c.addRole(new Fish1( DEVICE_WIDTH, 90, "c_fish", this, 2));
 		
 		b = new Background(bmp);
 		p = new Protagonist("章魚" , this);
@@ -47,9 +49,19 @@ public class Game extends Activity {
 		t = new TestThread( gv );
 		t.start();
 	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public void setScore(int s) {
+		score = s;
+	}
+	
 	private void init() {
 		getWindowSize();
-		GAME_START_TIME = System.currentTimeMillis();
+//		GAME_START_TIME = System.currentTimeMillis();
+		Log.e("Game init" , "time" + GAME_START_TIME);
 		gv = (GameSurfaceView) findViewById(R.id.game);
 	}
 	public void start(View v) {
@@ -109,6 +121,7 @@ public class Game extends Activity {
 				if (PUSH_ID == GAME_START) {
 					synchronized (view.getHolder()) {
 						view.Draw();
+						GAME_START_TIME+=30;
 					}
 				} else if (PUSH_ID == GAME_STOP) {
 					

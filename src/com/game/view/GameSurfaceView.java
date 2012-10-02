@@ -12,6 +12,7 @@ import com.example.gameData.Background;
 import com.example.gameData.Checkpoints;
 import com.example.gameData.Protagonist;
 import com.example.gameData.Role;
+import com.example.sea_game_testing.Game;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -46,6 +47,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		this.checkpoints = checkpoints; 
 		h = p.getHeight();
 		w = p.getWidth();
+		pX = p.getX() + w;
+		pY = p.getY() + h;
 	}
 	
 	public void Draw() {
@@ -69,22 +72,29 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	}
 	int h = 0;
 	int w = 0;
-	int pX = p.getX() + w; 
-	int pY = p.getY() + h;
+	int pX = 0; 
+	int pY = 0;
 	private void CollideListener() {
 		
 		for (int x = 0; x < checkpoints.getRoleListSize(); x++ ) {
 			Role r = checkpoints.getRole( x );
 			if (r != null ) {
 				if ( CollideWidth(r) && CollideHeight(r) ) { //碰撞 
-					r.setDead( true);
+					r.setDead( true );
 //					add 分數
+					Game.score+=10;
+					if ( Game.score >= 100 )
+						Game.score = 100;
 				}
 			}
 		}
-		
 	}
-	
+	private boolean Leave( Role r ) {
+		if ( r.getX() < 0 ) {
+			return true;
+		}
+		return false;
+	}
 	private boolean CollideWidth( Role r ) {
 		if ( 
 				( w <= r.getX() && r.getX() <= pX ) && 
@@ -116,7 +126,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	@Override 
 	public boolean onTouchEvent( MotionEvent event ) {
 		super.onTouchEvent(event);
-		Log.e("touch" , "" +event.getAction());
+//		Log.e("touch" , "" +event.getAction());
 		if ( p != null ) {
 			p.setX( (int)event.getX());
 			p.setY( (int)event.getY());
@@ -127,7 +137,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 //		 TODO Auto-generated method stub
-		Log.w(" surfaceCreated " , "");
+//		Log.w(" surfaceCreated " , "");
 	}
 
 	@Override

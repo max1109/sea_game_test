@@ -6,7 +6,7 @@ public abstract class Role {
 	int x = 0;
 	int y = 0;
 	String name ="";
-	int score = 0;
+	
 	int time = 0;
 	private boolean dead = false;
 	private int start_time = 0; // game start time is 4
@@ -54,14 +54,6 @@ public abstract class Role {
 		start_time = time;
 	}
 	
-	public int getScore() {
-		return score;
-	}
-	
-	public void setScore(int s) {
-		score = s;
-	}
-	
 	public void setX(int x ) {
 		this.x = x;
 	}
@@ -75,7 +67,7 @@ public abstract class Role {
 	}
 	
 	public int getY() {
-		return x;
+		return y;
 	}
 	
 	abstract public void draw( Canvas canvas);

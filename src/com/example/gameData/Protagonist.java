@@ -15,6 +15,7 @@ public class Protagonist {
 	int power = 0;
 	int height = 0;
 	int width = 0;
+	
 	Bitmap  move_animation_bitmap[];
 	int move_animation[] = {
 			R.drawable.octopus_1,
@@ -22,8 +23,8 @@ public class Protagonist {
 			R.drawable.octopus_3,
 			R.drawable.octopus_4,
 			R.drawable.octopus_5,
-			R.drawable.octopus_5,
-			R.drawable.octopus_5,
+			R.drawable.octopus_5
+			
 			
 	};
 	int _move_animation = 0;
@@ -57,7 +58,7 @@ public class Protagonist {
 	
 	private void init( Context c ) {
 		Bitmap tmp[] = new Bitmap[move_animation.length];
-		for (int x = 0; x > tmp.length; x++ ) {
+		for (int x = 0; x < tmp.length; x++ ) {
 			tmp[x] = BitmapFactory.decodeResource(
 					c.getResources(), 
 					move_animation[x]
@@ -74,7 +75,9 @@ public class Protagonist {
 		canvas.drawBitmap(bmp, x - bmp.getWidth() / 2, y - bmp.getHeight() / 2 , null); //test use
 	}
 	public int getMoveAnimation() {
-		_move_animation  = ( _move_animation + 1 ) % (move_animation.length - 1 );   
+		_move_animation  = ( _move_animation + 1 ) % (move_animation.length );   
 		return _move_animation;
 	}
+	
+	
 }
