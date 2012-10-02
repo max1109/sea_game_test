@@ -6,8 +6,6 @@ public abstract class Role {
 	int x = 0;
 	int y = 0;
 	String name ="";
-	
-	int time = 0;
 	private boolean dead = false;
 	private int start_time = 0; // game start time is 4
 	private int height = 0;
@@ -21,7 +19,7 @@ public abstract class Role {
 		this.x = x;
 		this.y = y;
 		this.name = name ;
-		this.time = time ;
+		this.start_time = time ;
 	}
 	
 	public int getHeight() {

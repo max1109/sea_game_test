@@ -38,8 +38,8 @@ public class Game extends Activity {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
 		c = new Checkpoints();
-		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 8));
-//		c.addRole(new Fish1( DEVICE_WIDTH, 60, "a_fish", this, 4));
+		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 2));
+		c.addRole(new Fish1( DEVICE_WIDTH, 60, "a_fish", this, 4));
 //		c.addRole(new Fish1( DEVICE_WIDTH, 70, "b_fish", this, 3));
 //		c.addRole(new Fish1( DEVICE_WIDTH, 90, "c_fish", this, 2));
 		
@@ -121,7 +121,8 @@ public class Game extends Activity {
 				if (PUSH_ID == GAME_START) {
 					synchronized (view.getHolder()) {
 						view.Draw();
-						GAME_START_TIME+=30;
+						GAME_START_TIME += 30;
+//						Log.e("Game " , "GAME_START_TIME  add" +GAME_START_TIME );
 					}
 				} else if (PUSH_ID == GAME_STOP) {
 					

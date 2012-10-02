@@ -46,7 +46,6 @@ public class Fish1 extends Role {
 	public void setWidth(int w) {
 		super.setHeight( w );
 	}
-	private Context c = null; 
 	Bitmap  move_animation_bitmap[];
 	int move_animation[] = {
 		R.drawable.fish1_1,
@@ -76,7 +75,7 @@ public class Fish1 extends Role {
 	
 	public int getMoveAnimation() {
 		_move_animation  = ( _move_animation + 1 ) % ( move_animation_bitmap.length );
-		Log.e("Fish1 getMoveAnimation" , " MoveAnimation = " + _move_animation );
+//		Log.e("Fish1 getMoveAnimation" , " MoveAnimation = " + _move_animation );
 		return _move_animation;
 	}
 	

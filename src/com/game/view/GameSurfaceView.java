@@ -41,14 +41,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		holder.addCallback(this);
 		
 	}
+	int px = 0, py = 0;
 	public void init(Protagonist p, Background background, Checkpoints checkpoints) {
 		this.p = p;
 		this.background = background;
 		this.checkpoints = checkpoints; 
 		h = p.getHeight();
 		w = p.getWidth();
-		pX = p.getX() + w;
-		pY = p.getY() + h;
+		px = p.getX();
+		py = p.getY();
+		pX = px + w;
+		pY = py + h;
 	}
 	
 	public void Draw() {
@@ -61,6 +64,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		if ( canvas != null && p != null ) {
 			p.drawProtagonist(canvas);
 			CollideListener();
+			
 		}
 		if ( canvas != null && checkpoints != null ) {
 			checkpoints.draw(canvas);
@@ -78,6 +82,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		
 		for (int x = 0; x < checkpoints.getRoleListSize(); x++ ) {
 			Role r = checkpoints.getRole( x );
+			Log.e("chec CollideListener" , "x = " + x );
 			if (r != null ) {
 				if ( CollideWidth(r) && CollideHeight(r) ) { //碰撞 
 					r.setDead( true );
@@ -85,33 +90,43 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 					Game.score+=10;
 					if ( Game.score >= 100 )
 						Game.score = 100;
+					Log.e("chec RoleLeave" , "fish is dead" + Game.score );
 				}
+				RoleLeave(r);
 			}
 		}
 	}
-	private boolean Leave( Role r ) {
-		if ( r.getX() < 0 ) {
-			return true;
+	
+	針對章魚圖片各種大小做判斷
+	private void RoleLeave( Role r ) {
+		if ( r.getX() + r.getWidth() < 0 ) {
+			Log.e("chec RoleLeave" , "fish is leave" );
+			r.setDead(true);
 		}
-		return false;
 	}
 	private boolean CollideWidth( Role r ) {
+		Log.e("game suface View " , "py " + py + " px " + pX + " r.getX()  " + r.getX() + " r.getX() + r.getWidth() " + (r.getX() + r.getWidth() ));
 		if ( 
-				( w <= r.getX() && r.getX() <= pX ) && 
-				( w <= ( r.getX() + r.getWidth() ) && ( r.getX() + r.getWidth() ) <= pX ) ) 
+				( px <= r.getX() && r.getX() <= pX ) || 
+				( px <= ( r.getX() + r.getWidth() ) && ( r.getX() + r.getWidth() ) <= pX ) ) 
 		{
+			Log.e("game suface View " , "----------------------\nCollideWidth true ");
 			return true;
+			
 		}
+		Log.e("game suface View " , "CollideWidth false ");
 		return false;
 	}
 	
 	private boolean CollideHeight( Role r ) {
 		if ( 
-				( h <= r.getY() && r.getY() <= pY ) && 
-				( h <= (r.getY() + r.getHeight() ) && (r.getY() + r.getHeight() ) <= pY ) ) 
+				( py <= r.getY() && r.getY() <= pY ) || 
+				( py <= (r.getY() + r.getHeight() ) && (r.getY() + r.getHeight() ) <= pY ) ) 
 		{
+			Log.e("game suface View " , "----------------------\nCollideHeight true");
 			return true;
 		}
+		Log.e("game suface View " , "CollideHeight false ");
 		return false;
 	}
 	
