@@ -37,10 +37,10 @@ public class Protagonist {
 	}
 
 	public int getHeight() {
-		return height;
+		return move_animation_bitmap[ _move_animation ].getHeight();
 	}
 	public int getWidth() {
-		return width;
+		return move_animation_bitmap[ _move_animation ].getWidth();
 	}
 	
 	public int getX() {

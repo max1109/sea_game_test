@@ -39,10 +39,12 @@ public class Game extends Activity {
 				R.drawable.background_3200_752);
 		c = new Checkpoints();
 		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 2));
-		c.addRole(new Fish1( DEVICE_WIDTH, 60, "a_fish", this, 4));
-//		c.addRole(new Fish1( DEVICE_WIDTH, 70, "b_fish", this, 3));
-//		c.addRole(new Fish1( DEVICE_WIDTH, 90, "c_fish", this, 2));
-		
+		c.addRole(new Fish1( DEVICE_WIDTH, 100, "a_fish", this, 6));
+		c.addRole(new Fish1( DEVICE_WIDTH, 120, "b_fish", this, 10));
+		c.addRole(new Fish1( DEVICE_WIDTH, 150, "c_fish", this, 12));
+		c.addRole(new Fish1( DEVICE_WIDTH, 180, "c_fish", this, 18));
+		c.addRole(new Fish1( DEVICE_WIDTH, 300, "c_fish", this, 22));
+		c.addRole(new Fish1( DEVICE_WIDTH, 300, "c_fish", this, 28));
 		b = new Background(bmp);
 		p = new Protagonist("章魚" , this);
 		gv.init( p , b , c );
@@ -65,7 +67,8 @@ public class Game extends Activity {
 		gv = (GameSurfaceView) findViewById(R.id.game);
 	}
 	public void start(View v) {
-		p.setY( ( p.getY() + 5 ) % DEVICE_HEIGHT );
+		 
+		c.addRole(new Fish1( DEVICE_WIDTH, (int)( Math.random() * DEVICE_HEIGHT % DEVICE_HEIGHT ), "c_fish", this, 22));
 	}
 
 	public void stop(View v) {
