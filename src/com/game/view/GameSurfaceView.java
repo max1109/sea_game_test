@@ -41,7 +41,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		holder.addCallback(this);
 		
 	}
-	int px = 0, py = 0;
 	public void init(Protagonist p, Background background, Checkpoints checkpoints) {
 		this.p = p;
 		this.background = background;
@@ -74,6 +73,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 			Role r = checkpoints.getRole( x );
 //			Log.e("chec CollideListener" , "x = " + x );
 			if (r != null ) {
+				Log.e("game suface View "+ x , "r.getX()  " + r.getX() + " r.getX() + r.getWidth() " + (r.getX() + r.getWidth() ));
+				Log.e("game suface View "+ x , "r.getY()  " + r.getY() + " r.getY() + r.getHeight() " + (r.getY() + r.getHeight() ));
+				Log.e("game suface View "+ x , "px " + p.getX() + " py " + p.getY() + " px  w" + ( p.getX() + p.getWidth() )+ " py h " + (p.getY() + p.getHeight()));
 				if ( CollideWidth(r) && CollideHeight(r) ) { //碰撞 
 					r.setDead( true );
 //					add 分數
@@ -95,23 +97,25 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		}
 	}
 	private boolean CollideWidth( Role r ) {
-//		Log.e("game suface View " , "py " + py + " px " + pX + " r.getX()  " + r.getX() + " r.getX() + r.getWidth() " + (r.getX() + r.getWidth() ));
+		int px = p.getX() - p.getWidth() / 2;
+		int pX = p.getX() + p.getWidth() / 2;
 		if ( 
-				( p.getX() <= r.getX() && r.getX() <= ( p.getX() + p.getWidth() ) ) || 
-				( p.getX() <= ( r.getX() + r.getWidth() ) && ( r.getX() + r.getWidth() ) <= ( p.getX() + p.getWidth() ) ) ) 
+				( px <= r.getX() && r.getX() <= pX ) || 
+				( px <= ( r.getX() + r.getWidth() ) && ( r.getX() + r.getWidth() ) <= pX ) ) 
 		{
 			Log.e("game suface View " , "----------------------\nCollideWidth true ");
 			return true;
-			
 		}
 //		Log.e("game suface View " , "CollideWidth false ");
 		return false;
 	}
-	
 	private boolean CollideHeight( Role r ) {
+		// 因為圖片打點是以圖片中心點為 xy，若要得知圖片高度必須加上圖片一半的高度 
+		int py = p.getY() - p.getHeight() / 2;
+		int pY = p.getY() + p.getHeight() / 2;
 		if ( 
-				( p.getY() <= r.getY() && r.getY() <= ( p.getY() + p.getHeight() ) ) || 
-				( p.getY() <= (r.getY() + r.getHeight() ) && (r.getY() + r.getHeight() ) <= ( p.getY() + p.getHeight() ) ) ) 
+				( py <= r.getY() && r.getY() <= pY ) || 
+				( py <= (r.getY() + r.getHeight() ) && (r.getY() + r.getHeight() ) <= pY ) ) 
 		{
 			Log.e("game suface View " , "----------------------\nCollideHeight true");
 			return true;
