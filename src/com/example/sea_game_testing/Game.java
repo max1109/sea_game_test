@@ -22,6 +22,7 @@ public class Game extends Activity {
 	
 	private final static int GAME_START = 1;
 	private final static int GAME_STOP = 2;
+	private final static int GAME_END = 3;
 	private static int PUSH_ID = GAME_START;
 	public static long GAME_START_TIME = 0;
 	public static int score = 100;
@@ -90,13 +91,15 @@ public class Game extends Activity {
 	protected void onStart() {
 		super.onStart();
 	}
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		if (t != null) {
 			t = null;
 		}
+		p.close();
+		b.close();
+		Log.e("Game" , "onDestroy");
 	}
 	
 	@Override

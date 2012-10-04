@@ -19,6 +19,11 @@ public class Background {
 		this.background = background;
 	}
 
+	public void close() {
+		background.recycle();
+		background = null;
+	}
+	
 	public void drawBackground( Canvas canvas ) {
 		location += moveSize;
 
@@ -55,6 +60,5 @@ public class Background {
 			bmp.recycle();
 			bmp = null;
 		}
-	
 	}
 }

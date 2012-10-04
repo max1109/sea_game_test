@@ -34,7 +34,7 @@ public class Checkpoints {
 	}
 	
 	
-	public void removeRole(int i){
+	public void removeRole(int i) {
 		role_list.remove( i );
 	}
 	
@@ -48,9 +48,9 @@ public class Checkpoints {
 		return null;
 	}
 	
-	private int getNowTime() {
-		Log.e("checkpoints", "getNowTime"  + (System.currentTimeMillis() - Game.GAME_START_TIME));
-		return (int)(System.currentTimeMillis() - Game.GAME_START_TIME );
+	public void close() {
+		role_list = null;
 	}
+
 
 }
