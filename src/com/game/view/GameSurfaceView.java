@@ -78,13 +78,6 @@ public class GameSurfaceView extends SurfaceView implements
 			Role r = checkpoints.getRole(x);
 			// Log.e("chec CollideListener" , "x = " + x );
 			if (r != null) {
-				// Log.e("game suface View "+ x , "r.getX()  " + r.getX() +
-				// " r.getX() + r.getWidth() " + (r.getX() + r.getWidth() ));
-				// Log.e("game suface View "+ x , "r.getY()  " + r.getY() +
-				// " r.getY() + r.getHeight() " + (r.getY() + r.getHeight() ));
-				// Log.e("game suface View "+ x , "px " + p.getX() + " py " +
-				// p.getY() + " px  w" + ( p.getX() + p.getWidth() )+ " py h " +
-				// (p.getY() + p.getHeight()));
 				if (CollideWidth(r) && CollideHeight(r)) { // 碰撞
 					r.setDead(true);
 					// add 分數

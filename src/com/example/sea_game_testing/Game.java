@@ -1,6 +1,7 @@
 package com.example.sea_game_testing;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.example.gameData.Background;
 import com.example.gameData.Checkpoints;
 import com.example.gameData.Fish1;
 import com.example.gameData.Protagonist;
+import com.game.view.BloodView;
 import com.game.view.GameSurfaceView;
 
 public class Game extends Activity {
@@ -27,14 +29,17 @@ public class Game extends Activity {
 	public static long GAME_START_TIME = 0;
 	public static int score = 100;
 	private TestThread t = null; // 畫面 Thread
+	private BloodThread bt = null; // 血量 Thread
 	private Protagonist p = null; // 主角
 	private Background b = null; // 背景
 	private Checkpoints c = null; // 怪物
+	private BloodView blood = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
+		
 		init();
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
@@ -50,22 +55,25 @@ public class Game extends Activity {
 		p = new Protagonist("章魚" , this);
 		gv.init( p , b , c );
 		t = new TestThread( gv );
+		bt = new BloodThread( blood );
 		t.start();
+		bt.start();
 	}
 	
-	public int getScore() {
-		return score;
-	}
-	
-	public void setScore(int s) {
-		score = s;
-	}
+//	public int getScore() {
+//		return score;
+//	}
+//	
+//	public void setScore(int s) {
+//		score = s;
+//	}
 	
 	private void init() {
 		getWindowSize();
 //		GAME_START_TIME = System.currentTimeMillis();
 		Log.e("Game init" , "time" + GAME_START_TIME);
 		gv = (GameSurfaceView) findViewById(R.id.game);
+		blood = (BloodView) findViewById(R.id.blood);
 	}
 	public void start(View v) {
 		 
@@ -108,7 +116,38 @@ public class Game extends Activity {
 	    gv = null;
 	}
 	
-	
+	class BloodThread extends Thread {
+		BloodView b = null;
+		boolean loop = true;
+		BloodThread ( BloodView b ) {
+			this.b = b; 
+		}
+		public void run() {
+			while (loop) {
+				try {
+					this.sleep(1000);
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if ( PUSH_ID == GAME_START) {
+					score-=20;
+					Log.e("tag" , "score = " + score);
+					if (score <= 0) {
+						PUSH_ID = GAME_STOP;
+						Intent i = new Intent(Game.this , GameInfo.class);
+						startActivity(i);
+						overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
+						finish();
+					}
+					b.setBloodView( score );
+				} else if ( PUSH_ID == GAME_STOP) {
+					
+				}
+			}
+		}
+	}
 
 	class TestThread extends Thread {
 		GameSurfaceView view = null;
