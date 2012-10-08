@@ -8,14 +8,29 @@ import android.util.Log;
 
 import com.example.sea_game_testing.R;
 
-public class Fish1 extends Role {
+public class Fish extends Role {
 
-	public Fish1() {
+	private int blood = 0;
+	private int power = 0; // 魚魚等級 等級越高越強 
+	private int _move_animation = 0;
+	private int _move = 8;
+	private Bitmap  move_animation_bitmap[];
+	private int move_animation[] = {
+		R.drawable.fish1_1,
+		R.drawable.fish1_2,
+		R.drawable.fish1_3
+	};
+	
+	public Fish() {
 		
 	}
 			
-	public Fish1(int x, int y, String name , Context c  , int time) {
-
+	public Fish(
+			int x, int y, 
+			String name , Context c  , 
+			int time, int power , int blood 
+			) 
+	{
 		super(x, y, name, time);
 		init( c );
 	}
@@ -40,22 +55,31 @@ public class Fish1 extends Role {
 		setHeight( move_animation_bitmap[0].getHeight());
 //		move_animation_bitmap = tmp;
 	}
-	public void setHeight( int h) {
-		super.setWidth(h);
-	}
-	public void setWidth(int w) {
-		super.setHeight( w );
-	}
-	Bitmap  move_animation_bitmap[];
-	int move_animation[] = {
-		R.drawable.fish1_1,
-		R.drawable.fish1_2,
-		R.drawable.fish1_3
-	};
 	
-	int _move_animation = 0;
-	int _move = 8;
+	protected void setHeight( int h) {
+		super.setHeight(h);
+	}
+	
+	protected void setWidth(int w) {
+		super.setWidth( w );
+	}
 
+	public int getPower() {
+		return power;
+	}
+	
+	public void setPower( int power) {
+		this.power = power;
+	}
+	
+	public int getBlood() {
+		return blood;
+	}
+	
+	public void setBlood( int blood) {
+		this.blood= blood;
+	}
+	
 	public void setMove( int m) {
 		_move = m;
 	}

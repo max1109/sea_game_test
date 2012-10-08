@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.example.gameData.Background;
 import com.example.gameData.Checkpoints;
-import com.example.gameData.Fish1;
+import com.example.gameData.Fish;
 import com.example.gameData.Protagonist;
 import com.game.view.BloodView;
 import com.game.view.GameSurfaceView;
@@ -27,13 +27,13 @@ public class Game extends Activity {
 	private final static int GAME_END = 3;
 	private static int PUSH_ID = GAME_START;
 	public static long GAME_START_TIME = 0;
-	public static int score = 100;
+	public static int blood = 100;
 	private TestThread t = null; // 畫面 Thread
 	private BloodThread bt = null; // 血量 Thread
 	private Protagonist p = null; // 主角
 	private Background b = null; // 背景
 	private Checkpoints c = null; // 怪物
-	private BloodView blood = null;
+	private BloodView bloodView = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,18 +44,18 @@ public class Game extends Activity {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.background_3200_752);
 		c = new Checkpoints();
-		c.addRole(new Fish1( DEVICE_WIDTH, 30, "s_fish", this, 2));
-		c.addRole(new Fish1( DEVICE_WIDTH, 100, "a_fish", this, 6));
-		c.addRole(new Fish1( DEVICE_WIDTH, 120, "b_fish", this, 10));
-		c.addRole(new Fish1( DEVICE_WIDTH, 150, "c_fish", this, 12));
-		c.addRole(new Fish1( DEVICE_WIDTH, 180, "c_fish", this, 18));
-		c.addRole(new Fish1( DEVICE_WIDTH, 300, "c_fish", this, 22));
-		c.addRole(new Fish1( DEVICE_WIDTH, 300, "c_fish", this, 28));
+		c.addRole(new Fish( DEVICE_WIDTH, 30, "s_fish", this, 2 ,20, 20));
+		c.addRole(new Fish( DEVICE_WIDTH, 100, "a_fish", this, 6, 5 , 8));
+		c.addRole(new Fish( DEVICE_WIDTH, 120, "b_fish", this, 10, 4 ,1));
+		c.addRole(new Fish( DEVICE_WIDTH, 150, "c_fish", this, 12, 70, 2));
+		c.addRole(new Fish( DEVICE_WIDTH, 180, "c_fish", this, 18,70, 2));
+		c.addRole(new Fish( DEVICE_WIDTH, 300, "c_fish", this, 22,70, 2));
+		c.addRole(new Fish( DEVICE_WIDTH, 300, "c_fish", this, 28,70, 2));
 		b = new Background(bmp);
 		p = new Protagonist("章魚" , this);
-		gv.init( p , b , c );
+		gv.init( p , b , c , bloodView );
 		t = new TestThread( gv );
-		bt = new BloodThread( blood );
+		bt = new BloodThread( bloodView );
 		t.start();
 		bt.start();
 	}
@@ -73,11 +73,11 @@ public class Game extends Activity {
 //		GAME_START_TIME = System.currentTimeMillis();
 		Log.e("Game init" , "time" + GAME_START_TIME);
 		gv = (GameSurfaceView) findViewById(R.id.game);
-		blood = (BloodView) findViewById(R.id.blood);
+		bloodView = (BloodView) findViewById(R.id.blood);
 	}
 	public void start(View v) {
 		 
-		c.addRole(new Fish1( DEVICE_WIDTH, (int)( Math.random() * DEVICE_HEIGHT % DEVICE_HEIGHT ), "c_fish", this, 22));
+		c.addRole(new Fish( DEVICE_WIDTH, (int)( Math.random() * DEVICE_HEIGHT % DEVICE_HEIGHT ), "c_fish", this, 22, 8 ,80 ));
 	}
 
 	public void stop(View v) {
@@ -113,7 +113,7 @@ public class Game extends Activity {
 	@Override
 	public void onPause(){
 		super.onPause();
-	    gv = null;
+//	    gv = null;
 	}
 	
 	class BloodThread extends Thread {
@@ -126,22 +126,21 @@ public class Game extends Activity {
 			while (loop) {
 				try {
 					this.sleep(1000);
-					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if ( PUSH_ID == GAME_START) {
-					score-=20;
-					Log.e("tag" , "score = " + score);
-					if (score <= 0) {
+					blood -= 2;
+//					Log.e("tag" , "score = " + score);
+					if (blood <= 0) {
 						PUSH_ID = GAME_STOP;
 						Intent i = new Intent(Game.this , GameInfo.class);
 						startActivity(i);
 						overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
 						finish();
 					}
-					b.setBloodView( score );
+					b.setBlood( blood );
 				} else if ( PUSH_ID == GAME_STOP) {
 					
 				}

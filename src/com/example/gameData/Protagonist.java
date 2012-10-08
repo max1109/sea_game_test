@@ -10,7 +10,7 @@ import com.example.sea_game_testing.R;
 public class Protagonist {
 
 	String name = "";
-	int power = 0;
+	int power = 100;
 	int height = 0;
 	int width = 0;
 
@@ -54,6 +54,14 @@ public class Protagonist {
 		return y;
 	}
 
+	public int getPower() {
+		return power;
+	}
+	
+	public void setPower( int power) {
+		this.power = power;
+	}
+	
 	private void init(Context c) {
 		Bitmap tmp[] = new Bitmap[move_animation.length];
 		for (int x = 0; x < tmp.length; x++) {

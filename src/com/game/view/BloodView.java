@@ -34,9 +34,9 @@ public class BloodView extends View {
 		scale = (float)(( max - min ) / 100f);
 	}
 	
-	public void setBloodView ( int score) {
+	public void setBlood( int score) {
 		width = score * scale;
-		Log.e("blood" , "score " + score + " scale " + scale + "width = " + width );
+//		Log.e("blood" , "score " + score + " scale " + scale + "width = " + width );
 		postInvalidate();
 	}
 	

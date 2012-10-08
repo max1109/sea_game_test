@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.example.gameData.Background;
 import com.example.gameData.Checkpoints;
-import com.example.gameData.Fish1;
+import com.example.gameData.Fish;
 import com.example.gameData.Protagonist;
 import com.game.view.BloodView;
 import com.game.view.GameSurfaceView;

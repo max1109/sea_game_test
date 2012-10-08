@@ -11,6 +11,7 @@ public abstract class Role {
 	private int height = 0;
 	private int width = 0;
 	
+	
 	public Role () {
 		
 	}
@@ -29,10 +30,10 @@ public abstract class Role {
 		return width;
 	}
 	
-	public void setHeight( int h) {
+	protected void setHeight( int h) {
 		height = h;
 	}
-	public void setWidth(int w) {
+	protected void setWidth(int w) {
 		width = w;
 	}
 	
@@ -40,7 +41,7 @@ public abstract class Role {
 		return start_time;
 	}
 	
-	public boolean getDead() {
+	public boolean isDead() {
 		return dead;
 	}
 	
