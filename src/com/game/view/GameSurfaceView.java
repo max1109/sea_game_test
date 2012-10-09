@@ -94,7 +94,7 @@ public class GameSurfaceView extends SurfaceView implements
 						p.getPower() > r.getPower()) 
 				{ // 碰撞
 					r.setDead(true);
-					// add 分數
+					// up blood
 					Game.blood += r.getBlood();
 					if (Game.blood >= 100)
 						Game.blood = 100;

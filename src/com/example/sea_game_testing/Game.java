@@ -7,12 +7,15 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gameData.Background;
 import com.example.gameData.Checkpoints;
 import com.example.gameData.Fish;
 import com.example.gameData.Protagonist;
+import com.example.sea_game_testing.util.Util;
 import com.game.view.BloodView;
 import com.game.view.GameSurfaceView;
 
@@ -60,15 +63,8 @@ public class Game extends Activity {
 		bt.start();
 	}
 	
-//	public int getScore() {
-//		return score;
-//	}
-//	
-//	public void setScore(int s) {
-//		score = s;
-//	}
-	
 	private void init() {
+		Util.AddId( android.os.Process.myPid());
 		getWindowSize();
 //		GAME_START_TIME = System.currentTimeMillis();
 		Log.e("Game init" , "time" + GAME_START_TIME);
@@ -98,6 +94,19 @@ public class Game extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		Log.e("Game" , "onStart");
+	}
+	@Override
+	public void onPause(){
+		super.onPause();
+		Log.e("Game" , "onPause");
+		PUSH_ID = GAME_STOP;
+//	    gv = null;
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.e("Game" , "onResume");
 	}
 	@Override
 	protected void onDestroy() {
@@ -108,13 +117,24 @@ public class Game extends Activity {
 		p.close();
 		b.close();
 		Log.e("Game" , "onDestroy");
+		
 	}
 	
 	@Override
-	public void onPause(){
-		super.onPause();
-//	    gv = null;
-	}
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		Log.e(" onKeyDown " , "onKeyDown" + keyCode );
+           if (keyCode == KeyEvent.KEYCODE_BACK) {
+        	   if (t != null) {
+	       			t = null;
+	       		}
+	       		p.close();
+	       		b.close();
+	       		Util.closeGame();
+                return true;
+           } 
+           return super.onKeyDown(keyCode, event);
+    }
 	
 	class BloodThread extends Thread {
 		BloodView b = null;
@@ -135,7 +155,8 @@ public class Game extends Activity {
 //					Log.e("tag" , "score = " + score);
 					if (blood <= 0) {
 						PUSH_ID = GAME_STOP;
-						Intent i = new Intent(Game.this , GameInfo.class);
+						Intent i = new Intent(getApplicationContext() , GameInfo.class);
+						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(i);
 						overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
 						finish();

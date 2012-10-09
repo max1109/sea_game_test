@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -21,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gameData.Checkpoints;
+import com.example.sea_game_testing.util.Util;
 
 public class UserInfo extends Activity {
 	TextView info = null;
@@ -36,7 +35,7 @@ public class UserInfo extends Activity {
 	}
 
 	private void init() {
-		
+		Util.AddId( android.os.Process.myPid());
 		info = (TextView)findViewById(R.id.info);
 		img = (ImageView)findViewById(R.id.img);
 		list = (GridView)findViewById(R.id.list);
@@ -107,11 +106,22 @@ public class UserInfo extends Activity {
 	
 	public void play(View v) {
 		Intent i = new Intent();
-    	i.setClass(this, Game.class);
-    	i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+    	i.setClass(getApplicationContext(), Game.class);
+    	i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity( i );
     	finish();
 	}
+	
+	@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+           if (keyCode == KeyEvent.KEYCODE_BACK){                    
+                   this.finish();
+                   Util.closeGame();
+                   return true;
+           }
+           return super.onKeyDown(keyCode, event);
+    }
+	
 	class ListData extends BaseAdapter {
 		ArrayList<Checkpoints> item = null;
 		TextView text = null;
