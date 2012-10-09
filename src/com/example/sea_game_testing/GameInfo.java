@@ -35,7 +35,7 @@ public class GameInfo extends Activity {
 		super.onDestroy();
 	}
 
-	public void finish(View v ) {
+	public void goHome(View v ) {
 		finish();
 	}
 }

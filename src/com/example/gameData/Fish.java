@@ -32,6 +32,7 @@ public class Fish extends Role {
 			) 
 	{
 		super(x, y, name, time);
+		this.blood = blood;
 		init( c );
 	}
 	

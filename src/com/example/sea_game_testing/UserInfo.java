@@ -7,8 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -35,12 +41,68 @@ public class UserInfo extends Activity {
 		img = (ImageView)findViewById(R.id.img);
 		list = (GridView)findViewById(R.id.list);
 		
-		str = String.format( getResources().getString(R.string.info) ,"a","d","c","b");
+		str = String.format( getResources().getString(R.string.info) ,"Samuel","man","20","0");
 		info.setText(str);
 		ArrayList<Checkpoints> item = new ArrayList<Checkpoints>();
-		new Checkpoints();
+		
 		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		item.add( new Checkpoints());
+		
 		list.setAdapter( new ListData(this, item));
+		list.setOnItemClickListener( new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+			}
+		});
 	}
 	
 	public void play(View v) {
@@ -81,6 +143,10 @@ public class UserInfo extends Activity {
 			if (convertView == null) {
 				convertView = new TextView(c);
 			}
+			((TextView) convertView).setGravity( Gravity.CENTER);
+//			((TextView) convertView).setLayoutParams( new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+//			((TextView) convertView).setWidth(80);
+			
 			((TextView) convertView).setText( ""+ position);
 			((TextView) convertView).setTextSize(35);
 			((TextView) convertView).setTextColor(Color.CYAN);

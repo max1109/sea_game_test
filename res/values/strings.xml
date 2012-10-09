@@ -12,4 +12,8 @@
 	<string name="cancel">Cancel</string>
 	<string name="info">User: %1$s \t Sex: %2$s \t Age: %3$s\nCheckpoints: %4$s  </string>
 	<string name="play">Play</string>
+	<string name="go_to_user_info">Go To User Info</string>
+	<string name="checkpoints">Checkpoints: 1</string>
+	<string name="press">Press: 14</string>
+	<string name="test">Checkpoints: 1 \n Press: 14</string>
 </resources>
