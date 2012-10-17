@@ -91,7 +91,7 @@ public class GameSurfaceView extends SurfaceView implements
 				collide_height = CollideHeight(r);
 				if ( 
 						collide_width && collide_height &&
-						p.getPower() > r.getPower()) 
+						p.getPower() > r.getPower() ) 
 				{ // 碰撞
 					r.setDead(true);
 					// up blood
@@ -134,12 +134,8 @@ public class GameSurfaceView extends SurfaceView implements
 		// 修改魚的高度
 		int py = p.getY() - p.getHeight() / 2;
 		int pY = p.getY() + p.getHeight() / 2;
-//		Log.e("CollideHeight" , "p " + p.getY() + " pH " + p.getHeight());
-//		Log.e("CollideHeight" , "py " + py + " pY " + pY);
-//		Log.e("CollideHeight" , "r.getY() " + r.getY() + " r.getY() + r.getHeight() / 2 " + (r.getY() + r.getHeight() / 2));
 		if ( ( py <= r.getY() && r.getY() <= pY ) || 
 			 ( py <= (r.getY() + r.getHeight() / 2 ) && ( r.getY() + r.getHeight() / 2 ) <= pY )) {
-//			Log.e("CollideHeight","dead");
 			
 			return true;
 		}

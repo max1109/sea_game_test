@@ -153,6 +153,12 @@ public class UserInfo extends Activity {
 			if (convertView == null) {
 				convertView = new TextView(c);
 			}
+			
+			if (position % 2 == 0)
+				((TextView) convertView).setBackgroundResource(R.drawable.clam_1);
+			else 
+				((TextView) convertView).setBackgroundResource(R.drawable.clam_2);
+			
 			((TextView) convertView).setGravity( Gravity.CENTER);
 //			((TextView) convertView).setLayoutParams( new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 //			((TextView) convertView).setWidth(80);

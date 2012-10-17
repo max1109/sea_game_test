@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 
 import com.example.sea_game_testing.R;
 
-public class Protagonist {
+public class Protagonist extends Location {
 
 	String name = "";
 	int power = 100;
@@ -21,10 +21,11 @@ public class Protagonist {
 
 	};
 	int _move_animation = 0;
-	int x = 0, y = 0;
+//	int x = 0, y = 0;
 	Context c = null;
 
 	public Protagonist(String name, Context c) {
+		super( 0, 0);
 		this.name = name;
 		this.c = c;
 		init(c);
@@ -38,21 +39,22 @@ public class Protagonist {
 		return move_animation_bitmap[_move_animation].getWidth();
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getY() {
-		return y;
-	}
+//	public int getX() {
+//		return super.getX();
+//	}
+//
+//	public void setX(int x) {
+//		super.setX(x);
+//		
+//	}
+//
+//	public void setY(int y) {
+//		super.setY(y);
+//	}
+//
+//	public int getY() {
+//		return super.getY();
+//	}
 
 	public int getPower() {
 		return power;

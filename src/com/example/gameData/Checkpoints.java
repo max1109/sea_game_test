@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Canvas;
-import android.util.Log;
 
-import com.example.sea_game_testing.Game;
+import com.example.sea_game_testing.util.Util;
 
 public class Checkpoints {
 	List<Role> role_list = new ArrayList<Role>();
@@ -41,7 +40,7 @@ public class Checkpoints {
 	public Role getRole( int index ) {
 		Role  r = role_list.get( index );
 //		if ( !r.getDead() && getNowTime() > r.getStartTime() * 1000 ) {
-		if ( !r.isDead() && Game.GAME_START_TIME > r.getStartTime() * 100 ) {
+		if ( !r.isDead() && Util.GAME_START_TIME > r.getStartTime() * 100 ) {
 //			Log.e("checkpoints", "get Role" + index  + "Game.GAME_START_TIME" + Game.GAME_START_TIME + " r.getStartTime()  " + r.getStartTime() * 1000 );
 			return role_list.get( index );
 		}

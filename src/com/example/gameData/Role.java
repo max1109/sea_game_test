@@ -2,23 +2,17 @@ package com.example.gameData;
 
 import android.graphics.Canvas;
 
-public abstract class Role {
-	int x = 0;
-	int y = 0;
+public abstract class Role extends Location{
+	
 	String name ="";
 	private boolean dead = false;
 	private int start_time = 0; // game start time is 4
 	private int height = 0;
 	private int width = 0;
 	
-	
-	public Role () {
-		
-	}
-	
 	public Role(int x , int y ,String name , int time ) {
-		this.x = x;
-		this.y = y;
+		super (x , y);
+		
 		this.name = name ;
 		this.start_time = time ;
 	}
@@ -37,9 +31,6 @@ public abstract class Role {
 		width = w;
 	}
 	
-	public int getStartTime() {
-		return start_time;
-	}
 	
 	public boolean isDead() {
 		return dead;
@@ -49,25 +40,14 @@ public abstract class Role {
 		dead = d;
 	}
 	
-	public void setStartTime( int time ) {
-		start_time = time;
+	public int getStartTime() {
+		return start_time;
 	}
 	
-	public void setX(int x ) {
-		this.x = x;
-	}
-	
-	public void setY(int y) {
-		this.y = y;
-	}
-	
-	public int getX() {
-		return x;
-	}
-	
-	public int getY() {
-		return y;
-	}
+//	public void setStartTime( int time ) {
+//		start_time = time;
+//	}
 	
 	abstract public void draw( Canvas canvas);
+	abstract public void close();
 }

@@ -1,5 +1,8 @@
 package com.example.sea_game_testing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,16 +11,18 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.gameData.Background;
+import com.example.gameData.BackgroundObject;
 import com.example.gameData.Checkpoints;
 import com.example.gameData.Fish;
 import com.example.gameData.Protagonist;
+import com.example.gameData.Role;
 import com.example.sea_game_testing.util.Util;
 import com.game.view.BloodView;
 import com.game.view.GameSurfaceView;
+
 
 public class Game extends Activity {
 
@@ -29,7 +34,7 @@ public class Game extends Activity {
 	private final static int GAME_STOP = 2;
 	private final static int GAME_END = 3;
 	private static int PUSH_ID = GAME_START;
-	public static long GAME_START_TIME = 0;
+//	public static long GAME_START_TIME = 0;
 	public static int blood = 100;
 	private TestThread t = null; // 畫面 Thread
 	private BloodThread bt = null; // 血量 Thread
@@ -42,10 +47,8 @@ public class Game extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
-		
 		init();
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-				R.drawable.background_3200_752);
+		// test tmp data 
 		c = new Checkpoints();
 		c.addRole(new Fish( DEVICE_WIDTH, 30, "s_fish", this, 2 ,20, 20));
 		c.addRole(new Fish( DEVICE_WIDTH, 100, "a_fish", this, 6, 5 , 8));
@@ -54,7 +57,13 @@ public class Game extends Activity {
 		c.addRole(new Fish( DEVICE_WIDTH, 180, "c_fish", this, 18,70, 2));
 		c.addRole(new Fish( DEVICE_WIDTH, 300, "c_fish", this, 22,70, 2));
 		c.addRole(new Fish( DEVICE_WIDTH, 300, "c_fish", this, 28,70, 2));
-		b = new Background(bmp);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+				R.drawable.background_3200_752);
+		int bgf[] = {R.drawable.background_fish_2};
+		List<Role> item = new ArrayList<Role>();
+		item.add( new BackgroundObject( DEVICE_WIDTH, 300, "fish bg", this, 5, bgf));
+		//---------
+		b = new Background(bmp , item);
 		p = new Protagonist("章魚" , this);
 		gv.init( p , b , c , bloodView );
 		t = new TestThread( gv );
@@ -67,10 +76,11 @@ public class Game extends Activity {
 		Util.AddId( android.os.Process.myPid());
 		getWindowSize();
 //		GAME_START_TIME = System.currentTimeMillis();
-		Log.e("Game init" , "time" + GAME_START_TIME);
+		Log.e("Game init" , "time" + Util.GAME_START_TIME);
 		gv = (GameSurfaceView) findViewById(R.id.game);
 		bloodView = (BloodView) findViewById(R.id.blood);
 	}
+
 	public void start(View v) {
 		 
 		c.addRole(new Fish( DEVICE_WIDTH, (int)( Math.random() * DEVICE_HEIGHT % DEVICE_HEIGHT ), "c_fish", this, 22, 8 ,80 ));
@@ -103,10 +113,17 @@ public class Game extends Activity {
 		PUSH_ID = GAME_STOP;
 //	    gv = null;
 	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Log.e("Game" , "onResume");
+		PUSH_ID = GAME_START;
+	}
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.e("Game" , "onRestart");
 	}
 	@Override
 	protected void onDestroy() {
@@ -119,21 +136,25 @@ public class Game extends Activity {
 		Log.e("Game" , "onDestroy");
 		
 	}
-	
+	@Override
+	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+		Log.e(" onKeyLongPress " , "onKeyDown" + keyCode );
+		return super.onKeyLongPress(keyCode, event);
+	}
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		Log.e(" onKeyDown " , "onKeyDown" + keyCode );
-           if (keyCode == KeyEvent.KEYCODE_BACK) {
-        	   if (t != null) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (t != null) {
 	       			t = null;
-	       		}
-	       		p.close();
-	       		b.close();
-	       		Util.closeGame();
-                return true;
-           } 
-           return super.onKeyDown(keyCode, event);
+	       	}
+	       	p.close();
+	       	b.close();
+	       	Util.closeGame();
+	       	return true;
+		} 
+        return super.onKeyDown(keyCode, event);
     }
 	
 	class BloodThread extends Thread {
@@ -186,7 +207,7 @@ public class Game extends Activity {
 				if (PUSH_ID == GAME_START) {
 					synchronized (view.getHolder()) {
 						view.Draw();
-						GAME_START_TIME += 30;
+						Util.GAME_START_TIME += 30;
 //						Log.e("Game " , "GAME_START_TIME  add" +GAME_START_TIME );
 					}
 				} else if (PUSH_ID == GAME_STOP) {

@@ -21,9 +21,6 @@ public class Fish extends Role {
 		R.drawable.fish1_3
 	};
 	
-	public Fish() {
-		
-	}
 			
 	public Fish(
 			int x, int y, 
@@ -84,6 +81,8 @@ public class Fish extends Role {
 	public void setMove( int m) {
 		_move = m;
 	}
+	
+	@Override
 	public void draw( Canvas canvas) {
 		int gg = getMoveAnimation();
 		Bitmap tmp = move_animation_bitmap[ gg ];
@@ -102,6 +101,12 @@ public class Fish extends Role {
 		_move_animation  = ( _move_animation + 1 ) % ( move_animation_bitmap.length );
 //		Log.e("Fish1 getMoveAnimation" , " MoveAnimation = " + _move_animation );
 		return _move_animation;
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

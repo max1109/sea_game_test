@@ -6,6 +6,7 @@ import java.util.List;
 public class Util {
 
 	public static List<Integer> CLASS_ID = new ArrayList<Integer>();
+	public static int GAME_START_TIME = 0; 
 	public static void AddId( int id) {
 		CLASS_ID.add( id );
 	}
@@ -14,6 +15,5 @@ public class Util {
 		for (int x = 0 ; x < CLASS_ID.size(); x++ ) {
 			android.os.Process.killProcess( CLASS_ID.get( x ));
 		}
-//        System.exit(0);
 	}
 }
