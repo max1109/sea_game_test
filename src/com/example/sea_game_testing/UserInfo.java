@@ -26,11 +26,16 @@ public class UserInfo extends Activity {
 	ImageView img = null;
 	GridView list = null;
 	String str = "";
+	String user = "";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_info);
 		init();
+		if ( !getIntent().getExtras().getString("user").equals("") ) {
+			user = getIntent().getExtras().getString("user");
+		}
+		
 		
 	}
 
@@ -40,7 +45,7 @@ public class UserInfo extends Activity {
 		img = (ImageView)findViewById(R.id.img);
 		list = (GridView)findViewById(R.id.list);
 		
-		str = String.format( getResources().getString(R.string.info) ,"Samuel","man","20","0");
+		str = String.format( getResources().getString(R.string.info) , user ,"man","20","0");
 		info.setText(str);
 		ArrayList<Checkpoints> item = new ArrayList<Checkpoints>();
 		
@@ -55,43 +60,8 @@ public class UserInfo extends Activity {
 		item.add( new Checkpoints());
 		item.add( new Checkpoints());
 		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
+
+	
 		
 		list.setAdapter( new ListData(this, item));
 		list.setOnItemClickListener( new OnItemClickListener() {
