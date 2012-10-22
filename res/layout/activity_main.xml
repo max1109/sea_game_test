@@ -28,7 +28,9 @@
                     android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/user_intput" />
+                    android:focusable="false"
+                    android:hint="@string/user_intput"
+                    android:text="sam" />
             </TableRow>
 
             <TableRow
@@ -45,7 +47,9 @@
                     android:id="@+id/password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password_intput" />
+                    android:focusable="false"
+                    android:hint="@string/password_intput"
+                    android:text="qqqq" />
             </TableRow>
         </TableLayout>
 

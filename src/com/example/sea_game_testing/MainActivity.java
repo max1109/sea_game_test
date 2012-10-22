@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+    		// 監聽返回鍵
            if (keyCode == KeyEvent.KEYCODE_BACK){                    
                    this.finish();
                    Util.closeGame();

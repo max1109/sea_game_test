@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.example.android_usb_test.testUSB;
 import com.example.gameData.Background;
 import com.example.gameData.BackgroundObject;
 import com.example.gameData.Checkpoints;
@@ -30,25 +31,30 @@ public class Game extends Activity {
 	public static int DEVICE_WIDTH = 0;
 	public static int DEVICE_HEIGHT = 0;
 	
-	private final static int GAME_START = 1;
-	private final static int GAME_STOP = 2;
-	private final static int GAME_END = 3;
+	private static final int GAME_START = 1;
+	private static final int GAME_STOP = 2;
+	private static final int GAME_END = 3;
+	private static final int VID = 0x067b;
+	private static final int PID = 0x2303;
+	
 	private static int PUSH_ID = GAME_START;
 //	public static long GAME_START_TIME = 0;
-	public static int blood = 100;
+	public static int blood = 100; 
 	private TestThread t = null; // 畫面 Thread
 	private BloodThread bt = null; // 血量 Thread
 	private Protagonist p = null; // 主角
 	private Background b = null; // 背景
 	private Checkpoints c = null; // 怪物
 	private BloodView bloodView = null;
-	
+	private testUSB usb = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
 		init();
-		// test tmp data 
+		
+		//----- test tmp data 
 		c = new Checkpoints();
 		c.addRole(new Fish( DEVICE_WIDTH, 30, "s_fish", this, 2 ,20, 20));
 		c.addRole(new Fish( DEVICE_WIDTH, 100, "a_fish", this, 6, 5 , 8));
@@ -63,6 +69,7 @@ public class Game extends Activity {
 		List<Role> item = new ArrayList<Role>();
 		item.add( new BackgroundObject( DEVICE_WIDTH, 300, "fish bg", this, 5, bgf));
 		//---------
+		
 		b = new Background(bmp , item);
 		p = new Protagonist("章魚" , this);
 		gv.init( p , b , c , bloodView );
@@ -70,8 +77,12 @@ public class Game extends Activity {
 		bt = new BloodThread( bloodView );
 		t.start();
 		bt.start();
+		USBInit();
 	}
-	
+	private void USBInit() {
+		usb = new testUSB( this , VID , PID , p);
+		usb.connect();
+	}
 	private void init() {
 		Util.AddId( android.os.Process.myPid());
 		getWindowSize();
@@ -79,10 +90,11 @@ public class Game extends Activity {
 		Log.e("Game init" , "time" + Util.GAME_START_TIME);
 		gv = (GameSurfaceView) findViewById(R.id.game);
 		bloodView = (BloodView) findViewById(R.id.blood);
+		
 	}
 
 	public void start(View v) {
-		 
+		
 		c.addRole(new Fish( DEVICE_WIDTH, (int)( Math.random() * DEVICE_HEIGHT % DEVICE_HEIGHT ), "c_fish", this, 22, 8 ,80 ));
 	}
 
@@ -133,14 +145,12 @@ public class Game extends Activity {
 		}
 		p.close();
 		b.close();
+		usb.close();
+       	usb.offline();
 		Log.e("Game" , "onDestroy");
 		
 	}
-	@Override
-	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		Log.e(" onKeyLongPress " , "onKeyDown" + keyCode );
-		return super.onKeyLongPress(keyCode, event);
-	}
+
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
@@ -151,6 +161,8 @@ public class Game extends Activity {
 	       	}
 	       	p.close();
 	       	b.close();
+	       	usb.close();
+	       	usb.offline();
 	       	Util.closeGame();
 	       	return true;
 		} 
@@ -166,7 +178,7 @@ public class Game extends Activity {
 		public void run() {
 			while (loop) {
 				try {
-					this.sleep(1000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -175,21 +187,37 @@ public class Game extends Activity {
 					blood -= 2;
 //					Log.e("tag" , "score = " + score);
 					if (blood <= 0) {
-						PUSH_ID = GAME_STOP;
-						Intent i = new Intent(getApplicationContext() , GameInfo.class);
-						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(i);
-						overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
-						finish();
+//						PUSH_ID = GAME_STOP;
+//						Intent i = new Intent(getApplicationContext() , GameInfo.class);
+//						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//						startActivity(i);
+//						overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
+//						finish();
+						gameOver();
 					}
 					b.setBlood( blood );
+					if (c.isAllRoleDead()) {
+						gameOver();
+					}
 				} else if ( PUSH_ID == GAME_STOP) {
+					
+				} else if ( PUSH_ID == c.getEndTime()) {
 					
 				}
 			}
 		}
 	}
 
+	private void gameOver() {
+		PUSH_ID = GAME_STOP;
+		Intent i = new Intent(getApplicationContext() , GameInfo.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i);
+		overridePendingTransition( R.anim.zoom_enter, R.anim.zoom_exit);
+		finish();
+		
+	}
+	
 	class TestThread extends Thread {
 		GameSurfaceView view = null;
 		boolean loop = true;
@@ -201,7 +229,7 @@ public class Game extends Activity {
 		public void run() {
 			while (loop) {
 				try {
-					this.sleep(30);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 				}
 				if (PUSH_ID == GAME_START) {
@@ -210,7 +238,9 @@ public class Game extends Activity {
 						Util.GAME_START_TIME += 30;
 //						Log.e("Game " , "GAME_START_TIME  add" +GAME_START_TIME );
 					}
-				} else if (PUSH_ID == GAME_STOP) {
+				} else if ( PUSH_ID == GAME_STOP ) {
+					
+				} else if (PUSH_ID == c.getEndTime() ) {
 					
 				}
 				

@@ -5,15 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import com.devices.Zigbee.ZigBeeDevice;
 import com.example.sea_game_testing.R;
 
 public class Protagonist extends Location {
-
+	
 	String name = "";
 	int power = 100;
 	int height = 0;
 	int width = 0;
-
+	String device_id = "";
 	Bitmap move_animation_bitmap[];
 	int move_animation[] = { R.drawable.octopus_1, R.drawable.octopus_2,
 			R.drawable.octopus_3, R.drawable.octopus_4, R.drawable.octopus_5,
@@ -25,12 +26,20 @@ public class Protagonist extends Location {
 	Context c = null;
 
 	public Protagonist(String name, Context c) {
-		super( 0, 0);
+		super( 250 , 626);
 		this.name = name;
 		this.c = c;
 		init(c);
 	}
 
+	public String getDeviceId() {
+		return device_id;
+	}
+	
+	public void setDeviceId(String str ) {
+		device_id = str ;
+	}
+	
 	public int getHeight() {
 		return move_animation_bitmap[_move_animation].getHeight();
 	}

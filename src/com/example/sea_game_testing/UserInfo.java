@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +53,7 @@ public class UserInfo extends Activity {
 		item.add( new Checkpoints());
 		item.add( new Checkpoints());
 		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
-		item.add( new Checkpoints());
+
 
 	
 		
@@ -69,17 +63,21 @@ public class UserInfo extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
+				playGame();
 			}
 		});
 	}
-	
-	public void play(View v) {
+	private void playGame() {
 		Intent i = new Intent();
     	i.setClass(getApplicationContext(), Game.class);
     	i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     	startActivity( i );
     	finish();
+	}
+	
+	public void play(View v) {
+		playGame();
+		
 	}
 	
 	@Override
@@ -121,21 +119,23 @@ public class UserInfo extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = new TextView(c);
+				convertView = new ImageView(c);
 			}
 			
-			if (position % 2 == 0)
-				((TextView) convertView).setBackgroundResource(R.drawable.clam_1);
-			else 
-				((TextView) convertView).setBackgroundResource(R.drawable.clam_2);
+			if ( position > 3 )
+				((ImageView) convertView).setBackgroundResource(R.drawable.clam_2);
+			else {
+				((ImageView) convertView).setBackgroundResource(R.drawable.clam_1);
+				((ImageView) convertView).setImageResource(R.drawable.pearl_1);
+			}
 			
-			((TextView) convertView).setGravity( Gravity.CENTER);
+//			((ImageView) convertView).setGravity( Gravity.CENTER);
 //			((TextView) convertView).setLayoutParams( new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 //			((TextView) convertView).setWidth(80);
 			
-			((TextView) convertView).setText( ""+ position);
-			((TextView) convertView).setTextSize(35);
-			((TextView) convertView).setTextColor(Color.CYAN);
+//			((TextView) convertView).setText( ""+ position);
+//			((TextView) convertView).setTextSize(35);
+//			((TextView) convertView).setTextColor(Color.CYAN);
 			return convertView;
 		}
 		

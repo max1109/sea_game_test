@@ -4,10 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.Log;
-
-import com.example.sea_game_testing.Game;
 
 public class BackgroundObject extends Role{
 	
@@ -43,7 +39,7 @@ public class BackgroundObject extends Role{
 	@Override
 	public void draw(Canvas canvas) {
 		int index = getMoveAnimation() ;
-		super.setX( super.getX() - _move );
+		super.setX( (float)(super.getX() - _move) );
 		if ( super.getX() +  move_animation_bitmap[ index ].getWidth() > 0 ) 
 		{
 			canvas.drawBitmap( 

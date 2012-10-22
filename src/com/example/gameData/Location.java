@@ -1,26 +1,26 @@
 package com.example.gameData;
 
 public class Location {
-	int x = 0;
-	int y = 0;
+	float x = 0;
+	float y = 0;
 
 	public Location(int x, int y ) {
 		this.x = x;
 		this.y = y;
 	}
-	public void setX(int x ) {
-		this.x = x;
+	public void setX(float f ) {
+		this.x = f;
 	}
 	
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 }

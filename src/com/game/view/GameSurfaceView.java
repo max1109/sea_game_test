@@ -43,7 +43,6 @@ public class GameSurfaceView extends SurfaceView implements
 //		this.context = context;
 		holder = this.getHolder();
 		holder.addCallback(this);
-
 	}
 	
 	public void init(
@@ -120,8 +119,8 @@ public class GameSurfaceView extends SurfaceView implements
 	}
 
 	private boolean CollideWidth(Role r) {
-		int px = p.getX() - p.getWidth() / 2;
-		int pX = p.getX() + p.getWidth() / 2;
+		float px = p.getX() - p.getWidth() / 2;
+		float pX = p.getX() + p.getWidth() / 2;
 		if ( (px <= r.getX() && r.getX() <= pX) || 
 			 (px <= (r.getX() + r.getWidth()) && (r.getX() + r.getWidth()) <= pX)) {
 			return true;
@@ -132,8 +131,8 @@ public class GameSurfaceView extends SurfaceView implements
 	private boolean CollideHeight(Role r) {
 		// 因為圖片打點是以圖片中心點為 xy，若要得知圖片高度必須加上圖片一半的高度
 		// 修改魚的高度
-		int py = p.getY() - p.getHeight() / 2;
-		int pY = p.getY() + p.getHeight() / 2;
+		float py = p.getY() - p.getHeight() / 2;
+		float pY = p.getY() + p.getHeight() / 2;
 		if ( ( py <= r.getY() && r.getY() <= pY ) || 
 			 ( py <= (r.getY() + r.getHeight() / 2 ) && ( r.getY() + r.getHeight() / 2 ) <= pY )) {
 			
@@ -153,9 +152,10 @@ public class GameSurfaceView extends SurfaceView implements
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
-		// Log.e("touch" , "" +event.getAction());
 		if (p != null) {
+			Log.e("touch" , "x = " +event.getX() + " y = " + event.getY());
 			p.setX((int) event.getX());
+			
 			p.setY((int) event.getY());
 		}
 		return true;
