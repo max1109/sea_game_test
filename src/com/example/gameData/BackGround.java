@@ -31,7 +31,7 @@ public class Background {
 	public void drawBackground( Canvas canvas ) {
 		location += moveSize;
 
-		if ( location >  ( background.getWidth() - Game.DEVICE_WIDTH )  ) {
+		if ( location >  ( background.getWidth() - Util.DEVICE_WIDTH )  ) {
 			
 			Bitmap bmp1 = Bitmap.createBitmap(
 					background, 
@@ -41,7 +41,7 @@ public class Background {
 			Bitmap bmp2 = Bitmap.createBitmap(
 					background,
 					0 , 0, 
-					location + Game.DEVICE_WIDTH - background.getWidth(), background.getHeight()
+					location + Util.DEVICE_WIDTH - background.getWidth(), background.getHeight()
 				);
 			
 			canvas.drawBitmap(bmp1, 0 , 0, null);
@@ -54,7 +54,7 @@ public class Background {
 			bmp2 = null;
 			location  = location % ( background.getWidth() - moveSize);
 		} else {
-			Bitmap bmp = Bitmap.createBitmap(background, location, 0, Game.DEVICE_WIDTH, background.getHeight());
+			Bitmap bmp = Bitmap.createBitmap(background, location, 0, Util.DEVICE_WIDTH, background.getHeight());
 			Paint p = new Paint();
 			canvas.drawBitmap(bmp, 0 , 0, p);
 			bmp.recycle();

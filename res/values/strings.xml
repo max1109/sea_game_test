@@ -16,4 +16,5 @@
 	<string name="checkpoints">Checkpoints: 1</string>
 	<string name="press">Press: 14</string>
 	<string name="test">Checkpoints: 1 \n Press: 14</string>
+	<string name="game_info">Stage: %1$s \n Score: %2$s</string>
 </resources>

@@ -63,6 +63,7 @@ public class testUSB {
 		this.mainActivity = mainActivity;
 		resBuff = new StringBuilder();
 		timer.schedule(task, 1000, 100);
+		
 		Vid = vid;
 		Pid = pid;
 		this.protagonist = p ;
@@ -79,6 +80,13 @@ public class testUSB {
 		}
 	}
 
+	public ArrayList<ZigBeeDevice> getDeviceList() {
+		 return deviceList;
+	}
+	
+	public void getDeviceList( ArrayList<ZigBeeDevice>  list) {
+		 deviceList = list;
+	}
 	public void offline() {
 		L.e( "斷線");
 		if (sUsbController != null) {
@@ -93,7 +101,15 @@ public class testUSB {
 	}
 
 	public void close() {
+		Log.e("tag" , "timer close");
+		timer.cancel();
+		timer = null;
 		task.cancel();
+		task = null;
+		
+		
+		
+		
 	}
 	private synchronized void sendData( String send ) {
 		if ( send != null && !send.equals("") ) {

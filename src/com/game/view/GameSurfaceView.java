@@ -9,7 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.gameData.Background;
-import com.example.gameData.Checkpoints;
+import com.example.gameData.Stage;
 import com.example.gameData.Fish;
 import com.example.gameData.Protagonist;
 import com.example.gameData.Role;
@@ -35,7 +35,7 @@ public class GameSurfaceView extends SurfaceView implements
 
 //	private Context context = null;
 	private Protagonist p = null;
-	private Checkpoints checkpoints = null;
+	private Stage checkpoints = null;
 	private Background background = null;
 	private BloodView blood= null;
 	
@@ -48,7 +48,7 @@ public class GameSurfaceView extends SurfaceView implements
 	public void init(
 			Protagonist p, 
 			Background background,
-			Checkpoints checkpoints,
+			Stage checkpoints,
 			BloodView blood) 
 	{
 		this.p = p;

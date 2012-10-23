@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.example.gameData.Protagonist;
 import com.example.sea_game_testing.Game;
-
+/*
 public class GameView extends View {
 
 	public GameView(Context context) {
@@ -128,3 +128,4 @@ public class GameView extends View {
 		invalidate();
 	}
 }
+*/

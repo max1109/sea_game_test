@@ -7,6 +7,11 @@ public class Util {
 
 	public static List<Integer> CLASS_ID = new ArrayList<Integer>();
 	public static int GAME_START_TIME = 0; 
+	public static String user = "";
+	public static String sex = "";
+	public static int DEVICE_WIDTH = 0;
+	public static int DEVICE_HEIGHT = 0;
+	
 	public static void AddId( int id) {
 		CLASS_ID.add( id );
 	}
