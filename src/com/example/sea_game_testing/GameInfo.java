@@ -24,6 +24,7 @@ public class GameInfo extends Activity {
 	ArrayList<ZigBeeDevice> list = null;
 	ImageView img = null;
 	TextView text = null;
+	private static int str_num = 0;
 	int stage = 0;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,15 +33,16 @@ public class GameInfo extends Activity {
 		Util.AddId(android.os.Process.myPid());
 		img = (ImageView) findViewById(R.id.graph);
 		text = (TextView) findViewById(R.id.info);
-		
+	
 		if (getIntent().getExtras() != null) {
 			blood = getIntent().getExtras().getInt("blood");
 			stage = getIntent().getExtras().getInt("stage");
-			list = (ArrayList<ZigBeeDevice>) getIntent().getSerializableExtra("list");
+			list = ( ArrayList<ZigBeeDevice>) getIntent().getSerializableExtra("list");
 			draw();
 		}
 		String str = String.format( getResources().getString(R.string.game_info), stage,blood);
-
+		
+		text.setText( str );
 	}
 
 	private void draw() {
@@ -56,9 +58,12 @@ public class GameInfo extends Activity {
 			int y1 = 0;
 			int y2 = 0;
 			String str = new String(device.getZBData().toString());
-			String ary[] = str.split(",");
+			String tmp = str.substring( str_num);
+			str_num = str.length();
+			String ary[] = tmp.split(",");
 			bmp = Bitmap.createBitmap(ary.length + 3 , 100 , Bitmap.Config.ARGB_4444);
 			c.setBitmap( bmp );
+			device.clearZBData();
 			for (int index = 0; index < ary.length; index++) {
 
 				if (index + 1 < ary.length) {
@@ -86,9 +91,11 @@ public class GameInfo extends Activity {
 	
 	private void gameOver() {
 		Intent i = new Intent(this, UserInfo.class);
-//		startActivity(i);
+		
 		i.putExtra("stage", stage );
-		setResult( RESULT_OK , i);
+		i.putExtra("score", blood );
+//		setResult( RESULT_OK , i);
+		startActivity(i);
 		overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
 		finish();
 

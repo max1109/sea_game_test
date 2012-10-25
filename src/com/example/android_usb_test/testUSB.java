@@ -20,14 +20,14 @@ public class testUSB {
 	private static final String TAG = "testUSB Zigbee管理";
 	private int Vid = 0;
 	private int Pid = 0;
-	private static UsbController sUsbController = null;
+	private UsbController sUsbController = null;
 	private Protagonist protagonist = null; // 主角
 	
 	private Activity mainActivity;
 	// 定時收訊
 	Timer timer = new Timer();
 
-	public ArrayList<ZigBeeDevice> deviceList = new ArrayList<ZigBeeDevice>();
+	public ArrayList<ZigBeeDevice> deviceList = null;
 //	private 序列 命令序列 = new 序列(5);
 	private StringBuilder resBuff;
 
@@ -35,6 +35,9 @@ public class testUSB {
 	private String number_id_str = "P" ;
 
 	private static boolean 連線完成 = false;
+	
+	int y = 700;
+	float percent = 4.85f;
 	
 	TimerTask task = new TimerTask() {
 		@Override
@@ -58,18 +61,23 @@ public class testUSB {
 			}
 		}
 	};
-	public testUSB( Activity mainActivity , int vid , int pid , Protagonist p ) {
+	public testUSB( Activity mainActivity , int vid , int pid ) {
 		// TODO Auto-generated constructor stub
 		this.mainActivity = mainActivity;
 		resBuff = new StringBuilder();
 		timer.schedule(task, 1000, 100);
-		
+		deviceList = new ArrayList<ZigBeeDevice>()
 		Vid = vid;
 		Pid = pid;
-		this.protagonist = p ;
+//		this.protagonist = p ;
 	}
 
 
+	public void setProtagonist( Protagonist p) {
+		this.protagonist = p ;
+		if ( deviceList.size() > 0 &&  deviceList.get(0) != null )
+		protagonist.setDeviceId( deviceList.get(0).getDeviceId() );
+	}
 	public void connect() {
 		L.e( "連線");
 		if ( sUsbController == null) {
@@ -84,7 +92,7 @@ public class testUSB {
 		 return deviceList;
 	}
 	
-	public void getDeviceList( ArrayList<ZigBeeDevice>  list) {
+	public void setDeviceList( ArrayList<ZigBeeDevice>  list) {
 		 deviceList = list;
 	}
 	public void offline() {
@@ -102,21 +110,16 @@ public class testUSB {
 
 	public void close() {
 		Log.e("tag" , "timer close");
-		timer.cancel();
-		timer = null;
-		task.cancel();
-		task = null;
-		
-		
-		
-		
+//		timer.cancel();
+//		timer = null;
+//		task.cancel();
+//		task = null;
 	}
 	private synchronized void sendData( String send ) {
 		if ( send != null && !send.equals("") ) {
 			Log.e("testUSB 發送命令 " , send );
 			
-				sUsbController.send( send + "\r");
-			
+			sUsbController.send( send + "\r");
 		}
 	}
 
@@ -144,7 +147,6 @@ public class testUSB {
 				deleteBuffer(index , "200");
 				L.e( "200 命令傳送成功");
 			}
-			
 			index = resBuff.indexOf("301");
 			if (index >= 0) {
 				deleteBuffer(index , "301");
@@ -175,8 +177,7 @@ public class testUSB {
 		}
 	}
 
-	int y = 626;
-	float percent = 3.65f;
+	
 	private void DataAnalyze() {
 		String pattern = "[a-zA-Z][\\w]*[=][\\s-0-9]?[0-9]{2}[,]?";// P1=9
 //		String pattern = "[a-zA-Z]\\w+[=][\\s-][0-9]{2}[,]";// A= 01,B=-02,
@@ -197,7 +198,9 @@ public class testUSB {
 //					int data = Integer.parseInt(strarr[1].replace(" ", ""));
 					strarr[1] = strarr[1].trim();
 					
-					if( device.getNumberId().equals( protagonist.getDeviceId() )) {
+					if(
+							protagonist != null && 
+							device.getDeviceId().equals( protagonist.getDeviceId() )) {
 						Log.e( "tag" , "資料解析 ZigBeeDevice " + device.getNumberId()+" 資料= " + strarr[1].trim() + "\n " + (y + -1 * ( Integer.parseInt( strarr[1].trim() ) * percent )));
 						
 						protagonist.setY( y + -1 * ( Integer.parseInt( strarr[1].trim() ) * percent ) );
@@ -227,21 +230,22 @@ public class testUSB {
 		for (ZigBeeDevice device : deviceList) {
 			if ( device.getDeviceId().equals( device_id ) ) {
 				ttt = false;
+				sendData( device.start() );
 				break;
 			}
 		}
 
-		
 		if (ttt) {
 			String devId = number_id_str + number_id_pool;
 			L.e( "建立終端"+device_id+ " 代號:"+ devId);
 			ZigBeeDevice zb = new ZigBeeDevice( device_id, devId);
 			deviceList.add( zb );
+			sendData( zb.start() );
 			// 給定ID後啟動設備
-			if ( protagonist.getDeviceId().equals("") ) {
-				protagonist.setDeviceId( devId );
-				sendData( zb.start() );
-			}
+//			if ( protagonist.getDeviceId().equals("") ) {
+//				protagonist.setDeviceId( devId );
+//				sendData( zb.start() );
+//			}
 			
 			number_id_pool++;//delete use id
 		}

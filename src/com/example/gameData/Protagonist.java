@@ -26,7 +26,7 @@ public class Protagonist extends Location {
 	Context c = null;
 
 	public Protagonist(String name, Context c) {
-		super( 250 , 626);
+		super( 200 , 700);
 		this.name = name;
 		this.c = c;
 		init(c);
@@ -85,10 +85,13 @@ public class Protagonist extends Location {
 	}
 
 	public void drawProtagonist(Canvas canvas) {
-		Bitmap bmp = move_animation_bitmap[getMoveAnimation()];
+		int i = getMoveAnimation();
+		if ( move_animation_bitmap.length > i && move_animation_bitmap[i] != null) {
+		Bitmap bmp = move_animation_bitmap[ i ];
 		// canvas.drawBitmap(bmp, x , y , null);
 		canvas.drawBitmap(bmp, x - bmp.getWidth() / 2, y - bmp.getHeight() / 2,
 				null); // test use
+		}
 	}
 
 	public int getMoveAnimation() {

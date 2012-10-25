@@ -38,7 +38,6 @@ public class GameSurfaceView extends SurfaceView implements
 	private Stage checkpoints = null;
 	private Background background = null;
 	private BloodView blood= null;
-	
 	private void init(Context context) {
 //		this.context = context;
 		holder = this.getHolder();
@@ -60,7 +59,7 @@ public class GameSurfaceView extends SurfaceView implements
 	public void Draw() {
 		Canvas canvas = holder.lockCanvas();
 
-		if (canvas != null && background != null) {
+		if ( canvas != null && background != null) {
 			background.drawBackground(canvas);
 
 		}
@@ -69,7 +68,7 @@ public class GameSurfaceView extends SurfaceView implements
 			CollideListener();
 
 		}
-		if (canvas != null && checkpoints != null) {
+		if ( canvas != null && checkpoints != null) {
 			checkpoints.draw(canvas);
 		}
 
@@ -109,6 +108,7 @@ public class GameSurfaceView extends SurfaceView implements
 			}
 		}
 	}
+
 
 	// 針對章魚圖片各種大小做判斷
 	private void RoleLeave(Role r) {

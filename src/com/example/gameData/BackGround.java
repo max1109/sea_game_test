@@ -5,8 +5,8 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
-import com.example.sea_game_testing.Game;
 import com.example.sea_game_testing.util.Util;
 
 public class Background {
@@ -14,7 +14,7 @@ public class Background {
 //	private Context c = null;
 	private Bitmap background = null;
 	int location = 0;
-	int moveSize = 40;
+	int moveSize = 20;
 	List<Role> BG_Element= null;
 	public Background( Bitmap background , List<Role> item ) 
 	{
@@ -24,7 +24,9 @@ public class Background {
 
 
 	public void close() {
+		Log.e("Background" , "close");
 		background.recycle();
+		
 		background = null;
 	}
 	

@@ -26,8 +26,7 @@ public class Game extends Activity {
 	private static final int GAME_START = 1;
 	private static final int GAME_STOP = 2;
 	private static final int GAME_END = 3;
-	private static final int VID = 0x067b;
-	private static final int PID = 0x2303;
+
 
 	private static int PUSH_ID = GAME_START;
 	// public static long GAME_START_TIME = 0;
@@ -58,10 +57,10 @@ public class Game extends Activity {
 
 	private void USBInit() {
 		if (DeviceUtil.USB == null) {
-			DeviceUtil.USB = new testUSB(this, VID, PID, p);
+			DeviceUtil.USB = new testUSB(this, Util.VID, Util.PID);
 			DeviceUtil.USB.connect();
 		}
-
+		
 	}
 
 	private void init() {
@@ -107,12 +106,14 @@ public class Game extends Activity {
 		Log.e("onStart", "onCreat " );
 		p = new Protagonist("章魚", this);
 		gv.init(p, b, c, bloodView);
-		t = new TestThread(gv );
-		bt = new BloodThread(bloodView , c);
+		t = new TestThread(gv , c);
+		bt = new BloodThread(bloodView );
 		t.start();
 		bt.start();
-
+		DeviceUtil.USB.setProtagonist(p);
 		USBInit();
+		DeviceUtil.USB.deviceStart();
+		
 	}
 
 	@Override
@@ -139,23 +140,9 @@ public class Game extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		close();
-		// if (t != null) {
-		// t = null;
-		// }
-		// if (bt != null) {
-		// bt = null;
-		// }
-		// gv = null;
-		// p.close();
-		// b.close();
-		// c.close();
-		// Util.GAME_START_TIME = 0;
-		// usb.deviceStop();
-		// usb.offline();
-		// usb.close();
-		// android.os.Process.killProcess( android.os.Process.myPid() );
 		Log.e("Game", "onDestroy");
+		DeviceUtil.USB.deviceStart();
+		close();
 
 	}
 
@@ -164,20 +151,8 @@ public class Game extends Activity {
 
 		Log.e(" onKeyDown ", "onKeyDown" + keyCode);
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (t != null) {
-				t = null;
-			}
-			if (bt != null) {
-				bt = null;
-			}
-
-			p.close();
-			b.close();
-			DeviceUtil.USB.offline();
-			DeviceUtil.USB.close();
 			finish();
-			Util.closeGame();
-
+			
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -200,34 +175,47 @@ public class Game extends Activity {
 	}
 
 	private void close() {
-		p.close();
-		p = null;
-		b.close();
-		b = null;
-		c.close();
-		c = null;
-		stage_list = null;
-		Util.GAME_START_TIME = 0;
 		if (t != null) {
-			t.interrupt();
+//			t.interrupt();
+			t.setClose();
 			t = null;
 		}
 		if (bt != null) {
-			bt.interrupt();
+//			bt.interrupt();
+			bt.setClose();
 			bt = null;
 		}
-
+		try {
+//			gv.close();
+			gv = null;
+			p.close();
+			p = null;
+			b.close();
+			b = null;
+			c.close();
+			c = null;
+			stage_list = null;
+			Util.GAME_START_TIME = 0;
+			DeviceUtil.USB.deviceStop();
+			
+		}catch (Exception e) {
+			
+		}
 	}
 
 	class BloodThread extends Thread {
 		BloodView b = null;
 		boolean loop = true;
-		Stage stage = null;
-		BloodThread(BloodView b , Stage s) {
+		
+		BloodThread(BloodView b ) {
 			this.b = b;
-			this.stage = s ;
+			
 		}
-
+		
+		public void setClose() {
+			loop = false;
+		}
+		
 		public void run() {
 			while (loop) {
 				try {
@@ -238,25 +226,17 @@ public class Game extends Activity {
 				}
 				if (PUSH_ID == GAME_START) {
 					blood -= 2;
-					// Log.e("tag" , "score = " + score);
+					 Log.e("tag" , "blood = " + blood);
 					if (blood <= 0) {
 						gameOver();
 					}
 					b.setBlood(blood);
-					try {
 					
-						if ( this.stage.isAllRoleDead() ) {
-							Log.e("tag", " isAllRoleDead blood = " + blood);
-							gameOver();
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 				} else if (PUSH_ID == GAME_STOP) {
-
-				} else if (PUSH_ID == c.getEndTime()) {
-
+					
 				}
+
+				
 			}
 		}
 	}
@@ -264,12 +244,14 @@ public class Game extends Activity {
 	class TestThread extends Thread {
 		GameSurfaceView view = null;
 		boolean loop = true;
-		
-		TestThread(GameSurfaceView view  ) {
+		Stage stage = null; 
+		TestThread(GameSurfaceView view , Stage s ) {
 			this.view = view;
-			
+			this.stage = s ;
 		}
-
+		public void setClose() {
+			loop = false;
+		}
 		public void run() {
 			while (loop) {
 				try {
@@ -280,10 +262,21 @@ public class Game extends Activity {
 					synchronized (view.getHolder()) {
 						view.Draw();
 						Util.GAME_START_TIME += 30;
-						// Log.e("Game " , "GAME_START_TIME  add"
-						// +GAME_START_TIME );
+						// Log.e("Game " , "GAME_START_TIME  add" +GAME_START_TIME );
 					}
-					
+					try {
+//						if ( stage == null) {
+//							Log.e("tag", " stage null ");
+//						} else {
+//							Log.e("tag", " stage not null ");
+//						}
+						if ( this.stage.isAllRoleDead() ) {
+//							Log.e("tag", " isAllRoleDead blood = " + blood);
+							gameOver();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				} else if (PUSH_ID == GAME_STOP) {
 
 				} 

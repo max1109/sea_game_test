@@ -44,6 +44,9 @@ public class ZigBeeDevice implements Serializable {
 	public StringBuffer getZBData() {
 		return ZB_data;
 	}
+	public void clearZBData() {
+		ZB_data.delete(0 , ZB_data.length() - 1);
+	}
 	
 	public void setZBData( String data) {
 		ZB_data.append( data + ",");

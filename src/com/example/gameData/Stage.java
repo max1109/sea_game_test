@@ -9,20 +9,18 @@ import android.util.Log;
 import com.example.sea_game_testing.util.Util;
 
 public class Stage {
-	List<Role> role_list = new ArrayList<Role>();
+	List<Role> role_list = null;
 	private int end_time = 0; 
+	int role_num = 0;
 	public Stage() {
-	
+		role_list = new ArrayList<Role>();
+		role_num = 0;
 	}
-	public Stage(int end_time) {
-		this.end_time = end_time;
-	}
-	
-
 	
 	// get game end time
 	public int getEndTime() {
 		return end_time;
+		
 	}
 	
 	// set game end time
@@ -40,18 +38,18 @@ public class Stage {
 		}
 		
 	}
-	int role_num = 0;
+	
 	public boolean isAllRoleDead () {
 		// 若怪物已死亡會把ID直給避免重複判斷
-		Log.e("isAllRoleDead" , "role_list " + role_num + " " + role_list.size());
+//		Log.e("isAllRoleDead" , "role_list " + role_num + " " + ( role_list == null) );
 		for (int x = role_num; x < role_list.size(); x++ ) {
 			if (!role_list.get( x ).isDead()) {
 				return false;
 			}else {
 				role_num = x;
-				Log.e("isAllRoleDead" , " is dead " );
+//				Log.e("isAllRoleDead" , " is dead " );
 			}
-			Log.e("isAllRoleDead" , "x = " + x );
+//			Log.e("isAllRoleDead" , "x = " + x );
 		}
 		return true;
 	}

@@ -1,13 +1,18 @@
 package com.example.sea_game_testing;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.File.UserInfoFile;
 import com.example.sea_game_testing.util.Util;
 
 public class MainActivity extends Activity {
@@ -16,6 +21,7 @@ public class MainActivity extends Activity {
 	EditText password = null;
 	String u = "sam";
 	String pwd= "qqqq";
+	UserInfoFile a;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +29,19 @@ public class MainActivity extends Activity {
         Util.AddId( android.os.Process.myPid());
         user = (EditText)findViewById(R.id.user);
         password = (EditText)findViewById(R.id.password);
+//        loadFile();
     }
 
+    String game = "/game/";
+    private void loadFile() {
+    	File f = new File( Environment.getExternalStorageDirectory() + game, "aaa");
+//    	Log.e("loadFile" , f.getPath() + " " + Environment.getExternalStorageDirectory().getPath());
+    	File[] ff = f.listFiles();
+    	for (int x = 0; x < ff.length; x++) {
+    		Log.e("tag" , ff[x].getName());
+    	}
+    }
+    
     public void login(View v) {
     	if ( 
     		user.getText().toString().trim().equals( u ) &&

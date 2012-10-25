@@ -5,59 +5,79 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android_usb_test.testUSB;
 import com.example.gameData.Stage;
+import com.example.sea_game_testing.util.DeviceUtil;
 import com.example.sea_game_testing.util.Util;
 
 public class UserInfo extends Activity {
 	TextView info = null;
 	ImageView img = null;
 	GridView list = null;
-
+	Button device = null;
 	private int play_game_num = 3;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_info);
 		init();
-
-		if (
-				getIntent().getExtras() != null && 
-				!getIntent().getExtras().getString("user").equals("")) {
-			Util.user = getIntent().getExtras().getString("user");
+		USBInit();
+		if (getIntent().getExtras() != null) {
+			if (
+					getIntent().getExtras().getString("user") != null && 
+					!getIntent().getExtras().getString("user").equals("")) 
+			{
+				Util.user = getIntent().getExtras().getString("user");
+				
+			} else if (
+					getIntent().getExtras().getInt("stage") >= 0 &&
+					getIntent().getExtras().getInt("score") >= 0
+					) 
+			{
+				play_game_num++;
+			}
 
 		}
 
 	}
-
+	
+	public void checkZB( View v ) {
+		Log.e("tag" , "" + DeviceUtil.USB.getDeviceList().size() );
+	}
+	
 	private void init() {
 		Util.AddId(android.os.Process.myPid());
 		info = (TextView) findViewById(R.id.info);
 		img = (ImageView) findViewById(R.id.img);
 		list = (GridView) findViewById(R.id.list);
-
+		device = (Button) findViewById(R.id.device);
 		String str = String.format(getResources().getString(R.string.info),
 				Util.user, Util.sex, "20", "0");
 		info.setText(str);
-		ArrayList<Stage> item = new ArrayList<Stage>();
+		ArrayList<DataItem> item = new ArrayList<DataItem>();
 
-		item.add(new Stage());
-		item.add(new Stage());
-		item.add(new Stage());
-		item.add(new Stage());
-		item.add(new Stage());
-		item.add(new Stage());
+		item.add(new DataItem(0 ,20));
+		item.add(new DataItem(1,30));
+		item.add(new DataItem(2,80));
+		item.add(new DataItem(3,0));
+		item.add(new DataItem(4,0));
+		item.add(new DataItem(5,0));
 
 		list.setAdapter(new ListData(this, item));
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -65,25 +85,37 @@ public class UserInfo extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-//				playGame();
+				// playGame();
 				Intent i = new Intent();
 				i.setClass(UserInfo.this, Game.class);
 				i.putExtra("stage", arg2);
-				
-				startActivityForResult( i , ReDataId );
+
+				startActivityForResult(i, ReDataId);
+				finish();
 			}
 		});
 	}
 
-	private final int  ReDataId = 1;
+	private final int ReDataId = 1;
+
+	
+	
+	private void USBInit() {
+		if (DeviceUtil.USB == null) {
+			DeviceUtil.USB = new testUSB(this, Util.VID, Util.PID);
+			DeviceUtil.USB.connect();
+		}
+		
+	}
 	private void playGame() {
 		Intent i = new Intent();
 		i.setClass(this, Game.class);
-		i.putExtra("stage", play_game_num + 1 );
-		i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
-
-		startActivityForResult( i , ReDataId );
-//		finish();
+		i.putExtra("stage", play_game_num + 1);
+		// i.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP );
+		// //如果這Activity是開啟的就不再重複開啟
+		i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		startActivity(i);
+		finish();
 	}
 
 	public void play(View v) {
@@ -100,12 +132,33 @@ public class UserInfo extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (ReDataId == requestCode) {
+
+			if (resultCode == RESULT_OK) {
+				Log.e("UserInfo", "onActivityResult");
+			}
+
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	class DataItem {
+		int stage = 0;
+		int score = 0;
+		DataItem( int stage , int score) {
+			this.score = score;
+			this.stage = stage;
+		}
+		
+	}
 	class ListData extends BaseAdapter {
-		ArrayList<Stage> item = null;
-		TextView text = null;
+		ArrayList<DataItem> item = null;
+//		TextView text = null;
 		Context c = null;
 
-		ListData(Context c, ArrayList<Stage> item) {
+		ListData(Context c, ArrayList<DataItem> item) {
 			this.c = c;
 			this.item = item;
 		}
@@ -131,25 +184,25 @@ public class UserInfo extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = new ImageView(c);
+				convertView = new TextView(c);
 			}
 
-			if (position > play_game_num)
-				((ImageView) convertView).setBackgroundResource(R.drawable.clam_2);
+			if (item.get( position ).score < 0)
+				((TextView) convertView).setBackgroundResource(R.drawable.clam_2);
 			else {
-				((ImageView) convertView).setBackgroundResource(R.drawable.clam_1);
-				((ImageView) convertView).setImageResource(R.drawable.pearl_1);
+				((TextView) convertView).setBackgroundResource(R.drawable.clam_1);
+//				((ImageView) convertView).setImageResource(R.drawable.pearl_1);
 			}
 
-			// ((ImageView) convertView).setGravity( Gravity.CENTER);
+			 ((TextView) convertView).setGravity( Gravity.CENTER);
 			// ((TextView) convertView).setLayoutParams( new
 			// AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT,
 			// LayoutParams.WRAP_CONTENT));
 			// ((TextView) convertView).setWidth(80);
 
-			// ((TextView) convertView).setText( ""+ position);
-			// ((TextView) convertView).setTextSize(35);
-			// ((TextView) convertView).setTextColor(Color.CYAN);
+			 ((TextView) convertView).setText( ""+ item.get(position).score);
+			 ((TextView) convertView).setTextSize(35);
+			 ((TextView) convertView).setTextColor(Color.CYAN);
 			return convertView;
 		}
 
