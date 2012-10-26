@@ -27,15 +27,24 @@
             android:textColor="#000"
             android:textSize="40sp" />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="goHome"
-            android:text="@string/go_to_user_info"
-            android:textColor="#000"
-            android:textSize="38sp"
+            android:src="@drawable/list"
+            android:background="@drawable/login"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:textStyle="bold" />
+		<ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="nextPlay"
+            android:src="@drawable/play"
+            android:background="#00000000"
+             />
 
         <TextView
             android:layout_width="wrap_content"

@@ -42,7 +42,7 @@
             android:id="@+id/device"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="testZB "
+            android:background="@drawable/connection_no"
             android:onClick="checkZB"
             android:layout_weight="1" />
     </LinearLayout>

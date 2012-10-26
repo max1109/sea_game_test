@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,19 +18,21 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android_usb_test.testUSB;
 import com.example.gameData.Stage;
 import com.example.sea_game_testing.util.DeviceUtil;
 import com.example.sea_game_testing.util.Util;
+import com.stage.data.StageItem;
 
 public class UserInfo extends Activity {
 	TextView info = null;
 	ImageView img = null;
 	GridView list = null;
 	Button device = null;
-	private int play_game_num = 3;
-
+	public static ArrayList<StageItem> item = null; 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,20 +46,28 @@ public class UserInfo extends Activity {
 			{
 				Util.user = getIntent().getExtras().getString("user");
 				
-			} else if (
-					getIntent().getExtras().getInt("stage") >= 0 &&
-					getIntent().getExtras().getInt("score") >= 0
-					) 
-			{
-				play_game_num++;
-			}
-
+			} 
+			
 		}
-
+		checkDeviceStatus();
 	}
 	
+	private void checkDeviceStatus() {
+		if ( DeviceUtil.USB.getDeviceList() != null && DeviceUtil.USB.getDeviceList().size() > 0 ) {
+//			String str = String.format(
+//					getResources().getString(R.string.device_number).toString() , 
+//					""+DeviceUtil.USB.getDeviceList().size()
+//					);
+			Toast.makeText( this,  "finish!", Toast.LENGTH_SHORT).show();
+//			DeviceUtil.USB.deviceStart();
+			device.setBackgroundResource(R.drawable.connection_ok);
+		}else {
+			device.setBackgroundResource(R.drawable.connection_no);
+			Toast.makeText( this,  "No Devices" + (DeviceUtil.USB.getDeviceList() != null), Toast.LENGTH_SHORT).show();
+		}
+	}
 	public void checkZB( View v ) {
-		Log.e("tag" , "" + DeviceUtil.USB.getDeviceList().size() );
+		checkDeviceStatus();
 	}
 	
 	private void init() {
@@ -70,15 +79,15 @@ public class UserInfo extends Activity {
 		String str = String.format(getResources().getString(R.string.info),
 				Util.user, Util.sex, "20", "0");
 		info.setText(str);
-		ArrayList<DataItem> item = new ArrayList<DataItem>();
-
-		item.add(new DataItem(0 ,20));
-		item.add(new DataItem(1,30));
-		item.add(new DataItem(2,80));
-		item.add(new DataItem(3,0));
-		item.add(new DataItem(4,0));
-		item.add(new DataItem(5,0));
-
+		if ( item == null ) {
+			item = new ArrayList<StageItem>();
+			item.add(new StageItem(0 ,20));
+			item.add(new StageItem(1,30));
+			item.add(new StageItem(2,80));
+			item.add(new StageItem(3,0));
+			item.add(new StageItem(4,0));
+			item.add(new StageItem(5,0));
+		}
 		list.setAdapter(new ListData(this, item));
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -90,16 +99,12 @@ public class UserInfo extends Activity {
 				i.setClass(UserInfo.this, Game.class);
 				i.putExtra("stage", arg2);
 
-				startActivityForResult(i, ReDataId);
+				startActivity( i );
 				finish();
 			}
 		});
 	}
 
-	private final int ReDataId = 1;
-
-	
-	
 	private void USBInit() {
 		if (DeviceUtil.USB == null) {
 			DeviceUtil.USB = new testUSB(this, Util.VID, Util.PID);
@@ -110,7 +115,18 @@ public class UserInfo extends Activity {
 	private void playGame() {
 		Intent i = new Intent();
 		i.setClass(this, Game.class);
-		i.putExtra("stage", play_game_num + 1);
+		
+		// touch play when check a stage lose		
+		int stage = 0;
+		if ( item != null ) {
+			for ( int x = stage; x < item.size(); x++ ) {
+				if ( item.get(x).score > 60) {
+					stage = item.get(x).stage;
+				}
+			}
+		}
+		
+		i.putExtra("stage", stage);
 		// i.setFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP );
 		// //如果這Activity是開啟的就不再重複開啟
 		i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -132,33 +148,14 @@ public class UserInfo extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (ReDataId == requestCode) {
 
-			if (resultCode == RESULT_OK) {
-				Log.e("UserInfo", "onActivityResult");
-			}
 
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	class DataItem {
-		int stage = 0;
-		int score = 0;
-		DataItem( int stage , int score) {
-			this.score = score;
-			this.stage = stage;
-		}
-		
-	}
 	class ListData extends BaseAdapter {
-		ArrayList<DataItem> item = null;
+		ArrayList<StageItem> item = null;
 //		TextView text = null;
 		Context c = null;
 
-		ListData(Context c, ArrayList<DataItem> item) {
+		ListData(Context c, ArrayList<StageItem> item) {
 			this.c = c;
 			this.item = item;
 		}

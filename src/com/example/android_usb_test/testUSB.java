@@ -27,7 +27,7 @@ public class testUSB {
 	// 定時收訊
 	Timer timer = new Timer();
 
-	public ArrayList<ZigBeeDevice> deviceList = null;
+	public ArrayList<ZigBeeDevice> deviceList = new ArrayList<ZigBeeDevice>();
 //	private 序列 命令序列 = new 序列(5);
 	private StringBuilder resBuff;
 
@@ -57,7 +57,7 @@ public class testUSB {
 					}
 				}
 			} else {
-				L.e("no run ");
+				L.e(" no run ");
 			}
 		}
 	};
@@ -66,7 +66,7 @@ public class testUSB {
 		this.mainActivity = mainActivity;
 		resBuff = new StringBuilder();
 		timer.schedule(task, 1000, 100);
-		deviceList = new ArrayList<ZigBeeDevice>()
+		deviceList = new ArrayList<ZigBeeDevice>();
 		Vid = vid;
 		Pid = pid;
 //		this.protagonist = p ;
@@ -122,7 +122,9 @@ public class testUSB {
 			sUsbController.send( send + "\r");
 		}
 	}
-
+	private synchronized void resend() {
+		sUsbController.resend();
+	}
 	private void receiverData() {
 		String ReStr = sUsbController.readStr();// 接收資料
 		if (ReStr != null && !ReStr.equals("")) {
@@ -151,6 +153,7 @@ public class testUSB {
 			if (index >= 0) {
 				deleteBuffer(index , "301");
 				L.e( "301 傳送錯誤");
+				resend();
 			}
 			index = resBuff.indexOf("306");
 			if (index >= 0) {
@@ -179,7 +182,7 @@ public class testUSB {
 
 	
 	private void DataAnalyze() {
-		String pattern = "[a-zA-Z][\\w]*[=][\\s-0-9]?[0-9]{2}[,]?";// P1=9
+		String pattern = "[a-zA-Z][0-9][=][0-9]{3}";// P1=9
 //		String pattern = "[a-zA-Z]\\w+[=][\\s-][0-9]{2}[,]";// A= 01,B=-02,
 		// String text = "Dear Snoopy, How are you !.";
 		Pattern p = Pattern.compile(pattern);

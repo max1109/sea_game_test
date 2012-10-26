@@ -139,6 +139,13 @@ public class UsbController {
 		}
 	}
 
+	public void resend() {
+		send_loop.resend();
+		// send_usb_thread.notifyAll();
+		synchronized (sSendLock) {
+			sSendLock.notifyAll();
+		}
+	}
 	// 設定鮑率
 	public void setUart(int br) {
 		if (br == 38400) {
@@ -244,7 +251,6 @@ public class UsbController {
 	private class UsbSendRunnable implements Runnable {
 		// private UsbDevice mDevice = null;
 		private byte[] mData = new byte[1];
-
 		UsbSendRunnable() {
 			// mDevice = dev;
 		}
@@ -255,12 +261,15 @@ public class UsbController {
 			send_data = true;
 		}
 
+		public void resend() {
+			send_data = true;
+		}
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			while (true) {
 				try {
-					if (send_data) {
+					if ( send_data ) {
 						conn.bulkTransfer(epOUT, mData, mData.length, 10);
 						send_data = false;
 						l("send data------------------------------------------------");

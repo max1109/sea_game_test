@@ -32,6 +32,18 @@ public class Fish extends Role {
 		init( c );
 	}
 	
+	public Fish(
+			int x, int y, 
+			String name , Context c  , 
+			int time, int power , int blood , int move_animation[]
+			) 
+	{
+		super(x, y, name, time);
+		this.blood = blood;
+		this.move_animation = move_animation;
+		init( c );
+	}
+	
 	private void init( Context c ) {
 		move_animation_bitmap = new Bitmap[move_animation.length];
 		

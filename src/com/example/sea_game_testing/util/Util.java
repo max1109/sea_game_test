@@ -22,6 +22,7 @@ public class Util {
 		CLASS_ID.add( id );
 	}
 	
+	
 	public static void closeGame() {
 		for (int x = 0 ; x < CLASS_ID.size(); x++ ) {
 			android.os.Process.killProcess( CLASS_ID.get( x ));
