@@ -184,7 +184,7 @@ public class UserInfo extends Activity {
 				convertView = new TextView(c);
 			}
 
-			if (item.get( position ).score < 0)
+			if (item.get( position ).score <= 0)
 				((TextView) convertView).setBackgroundResource(R.drawable.clam_2);
 			else {
 				((TextView) convertView).setBackgroundResource(R.drawable.clam_1);
