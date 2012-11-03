@@ -24,26 +24,27 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="@string/test"
-            android:textColor="#000"
-            android:textSize="40sp" />
+            android:textColor="#66aa10"
+            android:textSize="80sp" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#00000000"
             android:onClick="goHome"
-            android:src="@drawable/list"
-            android:background="@drawable/login"
-            android:paddingTop="2dp"
             android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:src="@drawable/list"
             android:textStyle="bold" />
-		<ImageButton
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#00000000"
             android:onClick="nextPlay"
             android:src="@drawable/play"
-            android:background="#00000000"
              />
 
         <TextView
@@ -52,12 +53,19 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-    <ImageView
+    <com.game.view.GraphView2
+        android:layout_gravity="center"
         android:id="@+id/graph"
-        android:layout_weight="1"
+        android:layout_width="880dp"
+        android:layout_height="460dp"
+        android:layout_marginBottom="3dp" />
+
+    <!--<ImageView
+        android:id="@+id/graph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:src="@drawable/test_2" />
-
+	-->
 </LinearLayout>

@@ -152,12 +152,12 @@ public class GameSurfaceView extends SurfaceView implements
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
-		if (p != null) {
-			Log.e("touch" , "x = " +event.getX() + " y = " + event.getY());
-			p.setX((int) event.getX());
-			
-			p.setY((int) event.getY());
-		}
+//		if (p != null) {
+//			Log.e("touch" , "x = " +event.getX() + " y = " + event.getY());
+//			p.setX((int) event.getX());
+//			
+//			p.setY((int) event.getY());
+//		}
 		return true;
 	}
 

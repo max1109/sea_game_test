@@ -18,18 +18,18 @@ public class DataHandler extends DefaultHandler {
 	@Override
 	public void startDocument() throws SAXException {
 		_data = new Data();
-		Log.e("DataHandler", "startDocument");
+//		Log.e("DataHandler", "startDocument");
 	}
 
 	@Override
 	public void endDocument() throws SAXException {
-		Log.e("DataHandler", "endDocument");
+//		Log.e("DataHandler", "endDocument");
 	}
 
 	@Override
 	public void startElement(String namespaceURI, String localName,
 			String qName, Attributes atts) throws SAXException {
-		Log.e("DataHandler", "startElement");
+//		Log.e("DataHandler", "startElement");
 		if (localName.equals("user")) {
 			_user = true;
 		} else if (localName.equals("pwd")) {
@@ -37,7 +37,7 @@ public class DataHandler extends DefaultHandler {
 		} else if (localName.equals("sex")) {
 			_sex = true;
 		} else if (localName.equals("stage")) {
-			Stage s = new Stage();
+			DataStage s = new DataStage();
 			s.id = atts.getValue("id");
 			s.date = atts.getValue("date");
 			_data.stage.add(s);
@@ -62,7 +62,7 @@ public class DataHandler extends DefaultHandler {
 	public void endElement(String namespaceURI, String localName, String qName)
 			throws SAXException 
 	{
-		Log.e("DataHandler", "endElement");
+//		Log.e("DataHandler", "endElement");
 
 		if (localName.equals("user")) {
 			_user = false;
@@ -89,7 +89,7 @@ public class DataHandler extends DefaultHandler {
 	 */
 	@Override
 	public void characters(char ch[], int start, int length) {
-		Log.e("DataHandler", "characters");
+//		Log.e("DataHandler", "characters");
 		String chars = new String(ch, start, length);
 		chars = chars.trim();
 

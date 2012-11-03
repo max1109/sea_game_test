@@ -2,5 +2,7 @@
 <resources>
 
     <drawable name="sea">#20A9C4</drawable>
+    <drawable name="yellow">#FFCC00</drawable>
+    <drawable name="pink">#FF3366</drawable>
 
 </resources>

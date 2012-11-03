@@ -22,7 +22,6 @@ public class MainActivity extends Activity {
 	EditText user = null;
 	EditText password = null;
 	
-	UserInfoFile a;
 	List<String> user_name_list = null;
 	UserInfoFile uf = null;
 
@@ -85,12 +84,15 @@ public class MainActivity extends Activity {
 	}
 	
 	public void login(View v) {
+		boolean login = false;
 		for (int x = 0; x < user_name_list.size(); x++) {
-			Util.USER_DATA = loadFileUserInfo( user_name_list.get( x ));
-			
+			if (!login )
+				Util.USER_DATA = loadFileUserInfo( user_name_list.get( x ));
+			Log.e("aaa", Util.USER_DATA.user + " " + Util.USER_DATA.pwd + " " + user_name_list.get( x ).toString());
 			if (
-					user.getText().toString().equals( user_name_list.get( x ).toString()) &&
-					Util.USER_DATA != null && 
+					
+					Util.USER_DATA != null && !login &&
+					user.getText().toString().equals( Util.USER_DATA.user.toString()) &&
 					password.getText().toString().equals( Util.USER_DATA.pwd.toString() )
 				) 
 			{
@@ -98,16 +100,17 @@ public class MainActivity extends Activity {
 				Intent i = new Intent();
 				i.setClass(getApplicationContext(), UserInfo.class);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				i.putExtra("user", user.getText().toString().trim());
+//				i.putExtra("user", user.getText().toString().trim());
 				startActivity(i);
 				finish();
-				
-			} else {
-				Toast.makeText(this, "User or Password  error!!", Toast.LENGTH_SHORT ).show();
+				login = true;
+				Log.e("tag" , Util.USER_DATA.user);
+				break;
 			}
 
 		}
-
+		if (!login )
+			Toast.makeText(this, "User or Password  error!!", Toast.LENGTH_SHORT ).show();
 	}
 
 	@Override

@@ -1,12 +1,14 @@
 package com.example.sea_game_testing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,18 +22,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.File.DataStage;
 import com.example.android_usb_test.testUSB;
 import com.example.gameData.Stage;
 import com.example.sea_game_testing.util.DeviceUtil;
 import com.example.sea_game_testing.util.Util;
-import com.stage.data.StageItem;
 
 public class UserInfo extends Activity {
 	TextView info = null;
 	ImageView img = null;
 	GridView list = null;
 	Button device = null;
-	public static ArrayList<StageItem> item = null; 
+	public static ArrayList<DataStage> item = null; 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +41,16 @@ public class UserInfo extends Activity {
 		setContentView(R.layout.user_info);
 		init();
 		USBInit();
-		if (getIntent().getExtras() != null) {
-			if (
-					getIntent().getExtras().getString("user") != null && 
-					!getIntent().getExtras().getString("user").equals("")) 
-			{
-				Util.user = getIntent().getExtras().getString("user");
-				
-			} 
-			
-		}
+//		if (getIntent().getExtras() != null) {
+//			if (
+//					getIntent().getExtras().getString("user") != null && 
+//					!getIntent().getExtras().getString("user").equals("")) 
+//			{
+//				Util.user = getIntent().getExtras().getString("user");
+//				
+//			} 
+//			
+//		}
 		checkDeviceStatus();
 	}
 	
@@ -66,6 +68,7 @@ public class UserInfo extends Activity {
 			Toast.makeText( this,  "No Devices" + (DeviceUtil.USB.getDeviceList() != null), Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 	public void checkZB( View v ) {
 		checkDeviceStatus();
 	}
@@ -76,17 +79,61 @@ public class UserInfo extends Activity {
 		img = (ImageView) findViewById(R.id.img);
 		list = (GridView) findViewById(R.id.list);
 		device = (Button) findViewById(R.id.device);
-		String str = String.format(getResources().getString(R.string.info),
-				Util.user, Util.sex, "20", "0");
-		info.setText(str);
-		if ( item == null ) {
-			item = new ArrayList<StageItem>();
-			item.add(new StageItem(0 ,20));
-			item.add(new StageItem(1,30));
-			item.add(new StageItem(2,80));
-			item.add(new StageItem(3,0));
-			item.add(new StageItem(4,0));
-			item.add(new StageItem(5,0));
+		if ( Util.USER_DATA != null) {
+			int h = 0;
+			for (int x = 0 ; x < Util.USER_DATA.stage.size();x++) {
+				if ( Integer.parseInt(Util.USER_DATA.stage.get( x ).score) > 0 ) {
+					h++;
+				}
+			}
+			
+			String str = String.format(getResources().getString(R.string.info),
+					Util.USER_DATA.user, Util.USER_DATA.sex, "20", h );
+			info.setText(str);
+		} else {
+			info.setText("loading...");
+		}
+		if ( Util.USER_DATA.stage != null) {
+			for (int x= Util.USER_DATA.stage.size() ; x < 6 ;x++) {
+				Util.USER_DATA.stage.add( new DataStage("" + x ,"0") );
+			}
+			
+		}
+		
+		item = new ArrayList<DataStage>();
+		if ( Util.USER_DATA.stage != null) {
+			List<DataStage> tmp = Util.USER_DATA.stage;
+			for (int x= 0; x < tmp.size();x++) {
+				item.add( tmp.get(x));
+			}
+		
+		}
+		if ( Util.USER_DATA.stage_new != null) {
+			List<DataStage> tmp = Util.USER_DATA.stage_new;
+			for (int x= 0; x < tmp.size();x++) {
+				item.add( tmp.get(x));
+				Log.e( "x" , "" + x );
+			}
+		
+		}
+		
+		if ( item.size() < 6 ) {
+			for (int x= item.size() ; x < 6 ;x++) {
+				Log.e( "x" , "" + x );
+				if ( x == 0)
+					item.add(new DataStage("0" ,"27"));
+				else if ( x == 1)
+					item.add(new DataStage("1","25"));
+				else if ( x == 2)
+					item.add(new DataStage("2","86"));
+				else if ( x == 3)
+					item.add(new DataStage("3","0"));
+				else if ( x == 4)
+					item.add(new DataStage("4","0"));
+				else if ( x == 5)
+					item.add(new DataStage("5","0"));
+			}
+				
 		}
 		list.setAdapter(new ListData(this, item));
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -120,8 +167,10 @@ public class UserInfo extends Activity {
 		int stage = 0;
 		if ( item != null ) {
 			for ( int x = stage; x < item.size(); x++ ) {
-				if ( item.get(x).score > 60) {
-					stage = item.get(x).stage;
+				int score = Integer.parseInt( item.get(x).score);
+				if ( score > 60) {
+					int s = Integer.parseInt( item.get(x).id);
+					stage = s;
 				}
 			}
 		}
@@ -151,11 +200,11 @@ public class UserInfo extends Activity {
 
 
 	class ListData extends BaseAdapter {
-		ArrayList<StageItem> item = null;
+		ArrayList<DataStage> item = null;
 //		TextView text = null;
 		Context c = null;
 
-		ListData(Context c, ArrayList<StageItem> item) {
+		ListData(Context c, ArrayList<DataStage> item) {
 			this.c = c;
 			this.item = item;
 		}
@@ -183,8 +232,8 @@ public class UserInfo extends Activity {
 			if (convertView == null) {
 				convertView = new TextView(c);
 			}
-
-			if (item.get( position ).score <= 0)
+			int score = Integer.parseInt( item.get( position ).score);
+			if (score <= 0)
 				((TextView) convertView).setBackgroundResource(R.drawable.clam_2);
 			else {
 				((TextView) convertView).setBackgroundResource(R.drawable.clam_1);

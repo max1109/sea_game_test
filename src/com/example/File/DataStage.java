@@ -1,10 +1,15 @@
 package com.example.File;
 
-public class Stage {
+public class DataStage {
 	public String id = ""; // stage number
 	public String date = ""; // is file name
 	public String score = "";  
-	public Stage() {
+	public DataStage() {
 		
 	}
+	public DataStage(String id , String score) {
+		this.id = id;
+		this.score = score;
+	}
+	
 }

@@ -150,21 +150,37 @@ public class StageList {
 	
 	public Background getBackground() {
 		int bgf[] = {R.drawable.background_fish_2};
+		int bgf1[] = {R.drawable.background_fish_1};
+		int bgf2[] = {R.drawable.background_fish_3};
+//		int bgf3[] = {R.drawable.background_grass_1};
+//		int bgf4[] = {R.drawable.background_grass_2};
 		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.background_3200_752);
+		
 		List<Role> item = new ArrayList<Role>();
-		if ( 1 == stage ) {
+		if ( 0 == stage ) {
 			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 300, "fish bg", context, 5, bgf));
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 400, "fish bg", context, 15, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 400, "fish bg", context, 15, bgf1));
 			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 430, "fish bg", context, 20, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 230, "fish bg", context, 35, bgf2));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 570, "fish bg", context, 60, bgf));
+		} else if ( 1 == stage ) {
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 280, "fish bg", context, 5, bgf1));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 420, "fish bg", context, 10, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 530, "fish bg", context, 18, bgf1));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 530, "fish bg", context, 18, bgf2));
 		} else if ( 2 == stage ) {
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 280, "fish bg", context, 5, bgf));
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 620, "fish bg", context, 7, bgf));
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 530, "fish bg", context, 18, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 300, "fish bg", context, 5, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 400, "fish bg", context, 15, bgf2));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 430, "fish bg", context, 20, bgf1));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 230, "fish bg", context, 35, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 570, "fish bg", context, 60, bgf1));
 		} else {
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 280, "fish bg", context, 5, bgf));
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 620, "fish bg", context, 7, bgf));
-			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 530, "fish bg", context, 18, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 300, "fish bg", context, 5, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 400, "fish bg", context, 15, bgf2));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 430, "fish bg", context, 20, bgf1));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 230, "fish bg", context, 35, bgf));
+			item.add( new BackgroundObject( Util.DEVICE_WIDTH, 570, "fish bg", context, 60, bgf1));
 		}
 		Background b = new Background(bmp , item);
 		return b ;

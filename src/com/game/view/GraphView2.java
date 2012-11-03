@@ -42,10 +42,10 @@ public class GraphView2 extends View implements OnGestureListener {
 		// detector = new GestureDetector(this);
 	}
 
-	int WIDTH = 480;
+	int WIDTH = 880;
 
 	int max_Y_axis = 100;
-	int max_X_axis = 100;
+	int max_X_axis = 210;
 
 	int interval_Y = 10;
 	int interval_X = 10;
@@ -55,7 +55,7 @@ public class GraphView2 extends View implements OnGestureListener {
 	int padding_left = 35;
 	int padding_top = 20;
 
-	int Y_axis[] = new int[ max_Y_axis /interval_Y ];
+	int Y_axis[] = new int[ max_Y_axis /interval_Y + 1 ];
 	private void drawYaxis(Canvas canvas) {
 		Paint p_line = new Paint();
 		Paint p_text = new Paint();
@@ -68,7 +68,7 @@ public class GraphView2 extends View implements OnGestureListener {
 				padding_left,
 				padding_top + max_Y_axis * zoom + (text_size - 1), p_line);
 		int ary_num = interval_Y;
-		for (int y = 0; y < max_Y_axis; y++) {
+		for (int y = 0; y <= max_Y_axis; y++) {
 
 			if (y % interval_Y == 0) {
 				canvas.drawLine(padding_left, padding_top + y * zoom,
@@ -76,7 +76,8 @@ public class GraphView2 extends View implements OnGestureListener {
 						p_line);
 				canvas.drawText("" + (max_Y_axis - y), 3, padding_top + y
 						* zoom, p_text);
-				Y_axis[ --ary_num ] = padding_top + y * zoom;
+				Y_axis[ ary_num-- ] = padding_top + y * zoom;
+//				Log.e("Y" , y + " " + (padding_top + y * zoom) );
 			}
 			// #20A9C4
 		}
@@ -89,6 +90,9 @@ public class GraphView2 extends View implements OnGestureListener {
 			10,20, 30,40,100,20,23,78,61,78,12,32,51,12,30,74,58,63,14,50, 50,60,70,80,90,100,12,12,12,12,12,22,
 			};
 
+	public void setData( int[] data ) {
+		this.data = data;
+	}
 	
 	private void drawXaxis(Canvas canvas) {
 		Paint p_line = new Paint();
@@ -102,7 +106,7 @@ public class GraphView2 extends View implements OnGestureListener {
 		if ( move_x < 0 ) {
 			move_x = 0;
 //			Log.e("drawXaxis ", "if");
-		// �j�L��ƪ�� �B ��ƪ�״�@����X��ƪ�פp��s
+		// 大過資料長度 且 資料長度減一次輸出資料長度小於零
 		}else if (move_x >= data.length && data.length - max_X_axis < 0) {
 			move_x = 0;
 //			Log.e("drawXaxis ", "else if1");
@@ -139,41 +143,38 @@ public class GraphView2 extends View implements OnGestureListener {
 		p_line.setStrokeWidth(text_size);
 		p_line.setColor(Color.RED);
 		
-		
 		if ( move_x < 0 ) {
 			move_x = 0;
 //			Log.e("drawXaxis ", "if");
-		// �j�L��ƪ�� �B ��ƪ�״�@����X��ƪ�פp��s
+		// 大過資料長度 且 資料長度減一次輸出資料長度小於零
 		}else if (move_x >= data.length && data.length - max_X_axis < 0) {
 			move_x = 0;
 //			Log.e("drawXaxis ", "else if1");
-			
 		}else if (move_x >= data.length && move_x - max_X_axis > 0) {
 //			Log.e("drawXaxis ", "else if2");
 			move_x = data.length - max_X_axis ;
 		}
 		
-//		Log.e("drawXaxis ",  data.length + " " + move_x);
-		
 		int g = 0;
 		// <=  .... 0 ~ 100  < .... 0 90 
-		Log.e("data" , move_x + " " + (move_x + max_X_axis));
+		
 		for (int index = move_x; index <= move_x + max_X_axis; index++) {
 			
 			if (index < data.length && index + 1 < data.length) {
 				int x = padding_left + g * zoom ;
 				int num = data[ index ] / interval_Y ;
 				
-				if ( num == 10 ) {
-					num = 9;
-				}
+//				if ( num == 10 ) {
+//					num = 9;
+//				}
 				int y = Y_axis[ num ] - ( ( data[ index ] % interval_Y ) * zoom );
+//				Log.e("data" , num + " " + data[ index ]);
 				g++;
 				int x2 = padding_left + g * zoom + 4;
 				int num2 = data[ index + 1 ] / interval_Y ;
-				if ( num2 == 10 ) {
-					num2 = 9;
-				}
+//				if ( num2 == 10 ) {
+//					num2 = 9;
+//				}
 				int y2 = Y_axis[ num2  ] - ( ( data[ index + 1] % interval_Y ) * zoom );
 //				Log.e("data" ,x + " " + y + " " + x2 + " " + y2);
 				canvas.drawLine(x, y, x2, y2, p_line);

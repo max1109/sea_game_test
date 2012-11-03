@@ -5,50 +5,117 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devices.Zigbee.ZigBeeDevice;
+import com.example.File.DataStage;
 import com.example.sea_game_testing.util.Util;
+import com.game.view.GraphView2;
 
 public class GameInfo extends Activity {
 
+	private GestureDetector detector;
 	ArrayList<ZigBeeDevice> list = null;
 	ImageView img = null;
 	TextView text = null;
 	private static int str_num = 0;
 	int stage = 0;
 	int score = 0;
-
+	GraphView2 view = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_info);
 		Util.AddId(android.os.Process.myPid());
-		img = (ImageView) findViewById(R.id.graph);
+		view = (GraphView2) findViewById(R.id.graph);
 		text = (TextView) findViewById(R.id.info);
-
+		text.setTypeface( Typeface.createFromAsset(getAssets(),"fonts/FEASFBRG.ttf") );
 		if (getIntent().getExtras() != null) {
 			score = getIntent().getExtras().getInt("blood");
 			stage = getIntent().getExtras().getInt("stage");
 			list = (ArrayList<ZigBeeDevice>) getIntent().getSerializableExtra(
 					"list");
-			draw();
+//			draw();
+			draw2();
+		} else {
+			score  = 60;
+			stage = 7;
+			ArrayList<ZigBeeDevice> aa = new ArrayList<ZigBeeDevice>();
+			ZigBeeDevice z = new ZigBeeDevice("12323" , "aweawe");
+			z.setZBData("20");
+			z.setZBData("30");
+			z.setZBData("20");
+			z.setZBData("50");
+			z.setZBData("60");
+			z.setZBData("80");
+			z.setZBData("90");
+			z.setZBData("25");
+			z.setZBData("65");
+			z.setZBData("78");
+			z.setZBData("54");
+			z.setZBData("23");
+			z.setZBData("65");
+			z.setZBData("89");
+			z.setZBData("76");
+			z.setZBData("21");
+			z.setZBData("98");
+			z.setZBData("100");
+			z.setZBData("20");
+			z.setZBData("23");
+			z.setZBData("12");
+			z.setZBData("2");
+			z.setZBData("2");
+			z.setZBData("0");
+			z.setZBData("0");
+			z.setZBData("2");
+			z.setZBData("20");
+			z.setZBData("20");
+			z.setZBData("20");
+			z.setZBData("20");
+			z.setZBData("20");
+			z.setZBData("20");
+			aa.add(z);
+			list = aa;
+			draw2();
 		}
+		detector = new GestureDetector( view );
 		String str = String.format(
 				getResources().getString(R.string.game_info), stage, score);
 
 		text.setText(str);
 	}
-
+	
+	@Override  
+    public boolean onTouchEvent(MotionEvent event) {  
+//        Log.i("Fling", "Activity onTouchEvent!");  
+        return this.detector.onTouchEvent(event);  
+    } 
+	String data = "";
+	private void draw2() {
+		for (ZigBeeDevice device : list) {
+			String str = new String(device.getZBData().toString());
+			String tmp = str.substring(str_num);
+			data = tmp;
+			str_num = str.length();
+			String ary[] = tmp.split(",");
+			int[] data = new int[ary.length];
+			for(int x = 0; x < ary.length; x++) {
+				data[ x ] = Integer.parseInt( ary[x] );
+			}
+			view.setData( data);
+		}
+	}
 	private void draw() {
 		Canvas c = new Canvas();
 		Bitmap bmp = null;
@@ -84,10 +151,24 @@ public class GameInfo extends Activity {
 	}
 
 	private void setStageScore() {
-		if (UserInfo.item != null && UserInfo.item.size() > stage
-				&& UserInfo.item.get(stage).score < score) {
-			UserInfo.item.get(stage).score = score;
+		if ( Util.USER_DATA.stage != null ) 
+		{
+			
+			boolean new_stage = true;
+			for (int x = 0; x < Util.USER_DATA.stage.size(); x++) {
+				if ( Util.USER_DATA.stage.get( x ).id.equals( "" + stage)) {
+					Util.USER_DATA.stage.get( x ).score = ""+score;
+					new_stage = false;
+					Log.e("odd ", stage + " " + score);
+				}
+			}
+			if ( new_stage ) {
+				Log.e("new ", stage + " " + score + " " + Util.USER_DATA.stage.size());
+				Util.USER_DATA.stage.add( new DataStage( "" + stage , "" + score));
+				Log.e("new ", stage + " " + score + " " + Util.USER_DATA.stage.size());
+			}
 		}
+		
 	}
 
 	@Override

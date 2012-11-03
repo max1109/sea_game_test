@@ -65,7 +65,7 @@ public class Background {
 		
 		for ( int index = 0 ; index < BG_Element.size(); index++ ) {
 			Role r = BG_Element.get( index );
-			if ( !r.isDead() && Util.GAME_START_TIME > r.getStartTime() ) {
+			if ( !r.isDead() && Util.GAME_START_TIME > r.getStartTime()  * 100) {
 				r.draw( canvas );
 			}
 		}
